@@ -1,5 +1,6 @@
-# local backup
 bak/
 *.txt
 !setup.txt
 .DS_Store
+*.app
+*.zip
