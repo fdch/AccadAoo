@@ -1,0 +1,8 @@
+#N canvas 0 304 450 300 12;
+#X obj 170 179 outlet;
+#X obj 19 33 inlet;
+#X obj 19 64 aoo_receive~ \$2 \$1;
+#X obj 19 175 throw~ rcv-\$1;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 0 0;

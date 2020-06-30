@@ -1,0 +1,14 @@
+#N canvas 0 22 450 300 12;
+#X obj 20 246 outlet;
+#X obj 25 165 route ping;
+#X obj 21 43 inlet~;
+#X obj 151 45 inlet~;
+#X obj 96 45 r \$2;
+#X obj 92 192 print \$2;
+#X obj 21 108 aoo_send~ \$3 \$1 2;
+#X connect 1 0 0 0;
+#X connect 1 1 5 0;
+#X connect 2 0 6 0;
+#X connect 3 0 6 1;
+#X connect 4 0 6 0;
+#X connect 6 0 1 0;
