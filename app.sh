@@ -5,7 +5,9 @@ VERSION=1 # version number
 # exclude from the deploy
 EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
 
-APP=AccadAoo-${VERSION}.app # app bundle
+DIR=$(echo ~/Documents/AccadAoo)
+
+APP=${DIR}/AccadAoo-${VERSION}.app # app bundle
 
 PATCHDIR=${APP}/Contents/Resources/patch/ # 'patch' dir inside bundle
 
@@ -13,15 +15,23 @@ for i in ${EXCLUDE[@]}; do EX+="--exclude=$i "; done
 
 run() {
 	if [[ "$1" == "deploy" ]] || [[ $1 == "d" ]]; then
-		rsync -aPiv ${EX} ../bin/* ${PATCHDIR}
+		rsync -qaP ${EX} ${DIR}/bin/* ${PATCHDIR}
 		rm -rf ${APP}.zip
-		zip -r ${APP}.zip ${APP} setup.txt 
+		zip -rq ${APP}.zip ${APP} ${DIR}/setup.txt 
+		echo "--- App created."
 	elif [[ "$1" == "backup" ]] || [[ $1 == "b" ]]; then
-		source ../backup.sh ${EX}
+		#	Find next backup item nubmer
+		i=1
+		if [[ -d ${DIR}/bak/bin_1 ]] ; then
+			for dirs in ${DIR}/bak/* ; do 
+				((i++))
+			done
+		fi
+		rsync -aP ${EX} ${DIR}/bin/* ${DIR}/bak/bin_${i}
 	elif [[ "$1" == "test" ]] || [[ $1 == "t" ]]; then
 		open ${APP}
 	elif [[ "$1" == "run" ]] || [[ $1 == "r" ]]; then
-		pd -jack -open main.pd
+		pd -noprefs -lib aoo -jack -open ${DIR}/bin/main.pd
 	else
 		echo "Not implemented: $1"
 	fi

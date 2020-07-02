@@ -10,13 +10,14 @@
 #X obj 62 144 f;
 #X obj 100 145 + 1;
 #X msg 119 119 0, f 2;
-#X msg 62 175 get \$1 2;
+#X msg 62 175 get \$1 1;
 #X obj 182 150 t f f;
 #X obj 201 56 f \$1;
 #X floatatom 201 82 5 0 0 0 - - -;
 #X obj 96 86 t b b a;
 #X obj 284 27 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
+#X obj 348 19 inlet;
 #X connect 0 0 15 0;
 #X connect 2 0 13 0;
 #X connect 3 0 11 0;
@@ -39,3 +40,4 @@
 #X connect 15 1 10 0;
 #X connect 15 2 7 1;
 #X connect 16 0 13 0;
+#X connect 17 0 13 0;
