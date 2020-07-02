@@ -1,4 +1,4 @@
-#N canvas 531 49 399 598 12;
+#N canvas 531 49 399 374 12;
 #X declare -lib aoo -path ./lib;
 #N canvas 561 31 527 714 guts 0;
 #N canvas 139 67 450 300 setup 0;
@@ -346,7 +346,7 @@ are no peers connected, f 16;
 #X msg 438 412 \; receive_from player2;
 #X obj 252 287 spigot;
 #X obj 429 278 spigot;
-#X obj 388 254 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 388 254 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 366 217 print out connections;
 #X text 44 360 these are set by the setup.txt file at startup:;
@@ -386,7 +386,7 @@ allows:;
 #X obj 256 37 r test-send;
 #X obj 278 100 switch~;
 #X obj 53 22 metro 400;
-#X obj 53 48 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 53 48 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X obj 53 68 sel 0 1;
 #X msg 110 145 1 10 \, 0.6 100 10 \, 0 200 110;
@@ -858,7 +858,7 @@ port 7077;
 #X msg 263 75 start;
 #X obj 240 40 sel;
 #X obj 374 453 nbx 5 14 -1e+37 1e+37 0 0 empty packetsize packetsize
-0 -8 0 10 -262144 -1 -1 512 256;
+0 -8 0 10 -262144 -1 -1 0 256;
 #X msg 374 472 packetsize \$1;
 #X text 480 470 max. UDP packet size (default: 512 bytes);
 #X obj 383 522 nbx 8 14 -1e+37 1e+37 0 0 empty timefilter timefilter
@@ -872,7 +872,7 @@ port 7077;
 1000);
 #X msg 363 413 ping \$1;
 #X obj 363 362 nbx 5 14 -1e+37 1e+37 0 0 empty ping ping 0 -8 0 10
--262144 -1 -1 1 256;
+-262144 -1 -1 0 256;
 #X text 429 413 set ping interval in ms (default: 1000) \, 0 = off
 ;
 #X msg 346 317 accept \$1;
@@ -1118,7 +1118,7 @@ at once;
 ;
 #X text 259 630 turn off;
 #X obj 158 410 nbx 5 14 -1e+37 1e+37 0 0 empty packetsize packetsize
-0 -8 0 10 -262144 -1 -1 512 256;
+0 -8 0 10 -262144 -1 -1 0 256;
 #X msg 158 430 packetsize \$1;
 #X text 264 428 max. UDP packet size (default: 512 bytes);
 #X msg 182 561 resend 4 10 16;
@@ -1140,7 +1140,7 @@ or out of sync), f 47;
 #X text 193 272 change AoO sink ID;
 #X msg 105 167 bufsize \$1;
 #X obj 105 143 nbx 5 14 -1e+37 1e+37 0 0 empty bufsize bufsize 0 -8
-0 10 -262144 -1 -1 20 256;
+0 10 -262144 -1 -1 0 256;
 #X text 186 166 increase for jittery \, unreliable networks!;
 #X text 187 145 buffer size in ms (default: 20 ms);
 #X msg 65 96 list_sources;
@@ -1173,12 +1173,15 @@ or out of sync), f 47;
 #X connect 36 0 37 0;
 #X connect 38 0 37 0;
 #X restore 70 561 pd to_aoo_receive;
+#X obj 317 356 pdcontrol;
+#X msg 317 330 browse setup.txt;
 #X connect 17 0 18 0;
 #X connect 18 0 20 0;
 #X connect 27 0 19 0;
 #X connect 38 0 29 0;
 #X connect 39 0 28 0;
-#X restore 275 283 pd guts;
+#X connect 41 0 40 0;
+#X restore 252 279 pd guts;
 #N canvas 504 220 711 375 setup 0;
 #X obj 331 254 setctl port;
 #X obj 331 104 setctl username symbol;
@@ -1217,29 +1220,29 @@ or out of sync), f 47;
 #X coords 0 -1 1 1 216 259 2 100 100;
 #X restore 28 82 pd setup;
 #N canvas 788 297 450 300 status 0;
-#X obj 101 101 cnv 15 318 15 empty status-update waiting_for_peers...
+#X obj 101 101 cnv 15 318 15 empty status-update type_your_name_and_click_connect
 20 8 0 12 -232576 -1 0;
-#X obj 101 117 cnv 15 318 48 status status-set online__(accadosu|your_name)
-20 10 0 14 -225271 -1 0;
+#X obj 101 117 cnv 15 318 48 status status-set offline 20 10 0 14 -233017
+-1 0;
 #X obj 104 103 bng 10 250 50 0 connecting connecting-set empty 17 7
 0 10 -232576 -1 -1;
 #X obj 104 121 bng 10 250 50 0 joining_group joining_group-set empty
 17 7 0 10 -203904 -1 -1;
 #X obj 104 137 tgl 10 0 online online-set empty 17 7 0 10 -204800 -1
--1 1 1;
+-1 0 1;
 #X obj 123 143 tgl 20 0 connect connect-set connect 25 10 0 12 -4034
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 402 148 tgl 15 0 format format-set fmt 0 -8 0 10 -203904 -1
 -1 0 1;
 #X obj 266 149 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
--2 -8 0 10 -262144 -1 -1 512 256;
+-2 -8 0 10 -262144 -1 -1 144 256;
 #X obj 318 149 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
-0 10 -262144 -1 -1 20 256;
+0 10 -262144 -1 -1 0 256;
 #X obj 104 153 bng 10 250 50 0 dummy dummy-set empty 14 5 0 10 -260097
 -1 -1;
 #X obj 206 143 tgl 20 0 start start-set start 25 10 0 12 -258113 -1
 -1 0 1;
-#X obj 402 119 tgl 15 0 ping ping-set png 1 7 0 8 -261682 -1 -1 1 1
+#X obj 402 119 tgl 15 0 ping ping-set png 1 7 0 8 -261682 -1 -1 0 1
 ;
 #X obj 383 119 bng 15 250 50 0 list-all list-all-set empty 17 7 0 10
 -261682 -1 -1;
@@ -1251,6 +1254,3 @@ or out of sync), f 47;
 -262144 -1 -1 0 1;
 #X obj 246 82 _meter in;
 #X obj 298 82 _meter out;
-#X obj 89 482 pdcontrol;
-#X msg 89 456 browse setup.txt;
-#X connect 7 0 6 0;
