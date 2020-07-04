@@ -6,9 +6,8 @@ VERSION=1 # version number
 EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
 
 DIR=$(echo ~/Documents/AccadAoo)
-
 APP=${DIR}/AccadAoo-${VERSION}.app # app bundle
-
+ZIP=${APP//.app/}-macos.zip
 PATCHDIR=${APP}/Contents/Resources/patch/ # 'patch' dir inside bundle
 
 for i in ${EXCLUDE[@]}; do EX+="--exclude=$i "; done
@@ -16,8 +15,8 @@ for i in ${EXCLUDE[@]}; do EX+="--exclude=$i "; done
 run() {
 	if [[ "$1" == "deploy" ]] || [[ $1 == "d" ]]; then
 		rsync -qaP ${EX} ${DIR}/bin/* ${PATCHDIR}
-		rm -rf ${APP}.zip
-		cd ${DIR} && zip -r ${APP//.app/}.zip ./*.app ./setup.txt && cd -
+		rm -rf ${ZIP}
+		cd ${DIR} && zip -r ${ZIP} ./*.app ./setup.txt && cd -
 		# zip -rqj ${DIR}/${APP}.zip ${APP} ${DIR}/setup.txt 
 		echo "--- App created."
 	elif [[ "$1" == "backup" ]] || [[ $1 == "b" ]]; then
