@@ -1,13 +1,15 @@
 #N canvas 727 214 450 300 12;
-#X obj 21 188 aoo_send~ \$2 \$1 2;
-#X obj 33 154 r~;
-#X obj 137 157 r~;
+#X obj 21 168 aoo_send~ \$2 \$1 2;
+#X obj 33 134 r~;
+#X obj 137 137 r~;
 #X obj 21 16 inlet;
 #X obj 21 246 print [aoo_send~ \$3-\$1];
-#X obj 71 85 _args _______;
-#X symbolatom 71 111 10 0 0 0 - - -;
-#X symbolatom 158 112 10 0 0 0 - - -;
-#X connect 0 0 4 0;
+#X obj 71 65 _args _______;
+#X symbolatom 71 91 10 0 0 0 - - -;
+#X symbolatom 158 92 10 0 0 0 - - -;
+#X obj 21 218 spigot;
+#X obj 60 192 r verbose;
+#X connect 0 0 8 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 1;
 #X connect 3 0 0 0;
@@ -15,3 +17,5 @@
 #X connect 5 0 1 0;
 #X connect 5 1 7 0;
 #X connect 5 1 2 0;
+#X connect 8 0 4 0;
+#X connect 9 0 8 1;
