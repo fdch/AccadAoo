@@ -1,6 +1,6 @@
 #N canvas 531 49 399 374 12;
 #X declare -lib aoo -path ./lib;
-#N canvas 561 31 594 496 guts 0;
+#N canvas 511 256 594 496 guts 0;
 #N canvas 139 67 709 560 setup 0;
 #X obj 270 242 t b p;
 #X msg 270 268 line 0 \, auto;
@@ -368,13 +368,36 @@ are no peers connected, f 16;
 #X connect 65 0 66 0;
 #X connect 67 0 65 0;
 #X restore 39 37 pd status;
+#N canvas 0 22 450 300 report-peers 0;
+#X obj 40 35 r peers;
+#X obj 40 61 text size peers;
+#X obj 40 87 sel;
+#X msg 40 113 no peers yet...;
+#X obj 40 139 print;
+#X msg 194 89 line 0 \, auto;
+#X obj 194 115 text sequence peers;
+#X obj 194 141 list split 2;
+#X obj 194 167 list split 1;
+#X obj 234 235 print peers;
+#X obj 234 201 list trim;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 5 0;
+#X connect 3 0 4 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 1 10 0;
+#X connect 10 0 9 0;
+#X restore 37 105 pd report-peers;
 #X restore 23 270 pd gui-glue;
 #X obj 23 22 declare -lib aoo -path ./lib;
 #N canvas 0 22 450 300 loadbang 0;
 #X obj 61 33 loadbang;
 #X msg 61 59 \; pd dsp 1 \; in-meter-set 1 \; out-meter-set 1 \; online-set
-0 \; connect-set 0 \; start-set set 0 \; in-vol-set 100 \; out-vol-set
-100 \; default-set bang \;;
+0 \; connect-set 0 \; start-set set 0 \; ping_time-set 1000 \; in-vol-set
+100 \; out-vol-set 100 \; default-set bang \;;
 #X connect 0 0 1 0;
 #X restore 23 53 pd loadbang;
 #N canvas 33 228 649 489 peers 0;
@@ -1008,6 +1031,7 @@ event which, f 64;
 #X obj 140 308 list trim;
 #X obj 14 662 outlet;
 #X obj 126 189 r format;
+#X obj 424 370 r ping_time;
 #X connect 0 0 3 0;
 #X connect 1 0 32 0;
 #X connect 2 0 32 0;
@@ -1036,6 +1060,7 @@ event which, f 64;
 #X connect 33 0 34 0;
 #X connect 34 0 35 0;
 #X connect 36 0 33 0;
+#X connect 37 0 30 1;
 #X restore 276 83 pd to_aoo_send;
 #N canvas 231 38 818 705 to_aoo_receive 0;
 #X msg 149 363 timefilter \$1;
@@ -1108,9 +1133,19 @@ or out of sync), f 47;
 #X connect 36 0 37 0;
 #X connect 38 0 37 0;
 #X restore 70 201 pd to_aoo_receive;
+#N canvas 460 94 609 350 from_aoo_send 0;
+#X obj 33 17 inlet;
+#X obj 33 239 print [aoo_send~ \$3-\$1];
+#X obj 33 211 spigot;
+#X obj 72 185 r verbose;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 1;
+#X restore 265 140 pd from_aoo_send;
 #X connect 0 0 1 0;
 #X connect 1 0 3 0;
 #X connect 4 0 2 0;
+#X connect 6 0 16 0;
 #X connect 14 0 6 0;
 #X connect 15 0 5 0;
 #X restore 23 394 pd signals;
@@ -1152,7 +1187,7 @@ or out of sync), f 47;
 10 -262144 -1 -1 1;
 #X coords 0 -1 1 1 216 259 2 100 100;
 #X restore 28 82 pd setup;
-#N canvas 788 297 450 300 status 0;
+#N canvas 393 265 450 300 status 0;
 #X obj 101 101 cnv 15 318 15 empty status-update type_your_name_and_click_connect
 20 8 0 12 -232576 -1 0;
 #X obj 101 117 cnv 15 318 48 status status-set offline 20 10 0 14 -233017
@@ -1171,13 +1206,15 @@ or out of sync), f 47;
 -1 0 1;
 #X obj 271 143 bng 20 250 50 0 debug debug-set debug 25 10 0 12 -204800
 -1 -1;
+#X obj 351 143 bng 20 250 50 0 peers peers-set peers 25 10 0 12 -261682
+-1 -1;
 #X coords 0 -1 1 1 320 66 2 100 100;
 #X restore 28 14 pd status;
 #X obj 250 252 tgl 15 0 test-send test-send-set test-send 17 7 0 10
 -262144 -1 -1 0 1;
 #X obj 246 82 _meter in;
 #X obj 298 82 _meter out;
-#N canvas 288 150 366 369 debug 0;
+#N canvas 288 150 366 385 debug 0;
 #N canvas 501 129 768 493 pcm 0;
 #X msg 458 124 2;
 #X msg 469 150 3;
@@ -1306,7 +1343,7 @@ pcm-bitdepth-set 2 \;;
 #X connect 40 0 34 0;
 #X connect 41 0 42 0;
 #X coords 0 -1 1 1 148 146 1 100 100;
-#X restore 29 136 pd pcm;
+#X restore 29 166 pd pcm;
 #N canvas 412 4 781 741 opus 0;
 #X obj 101 101 cnv 15 146 144 opus-canvas opus-canvas-set opus 20 12
 0 14 -233017 -1 0;
@@ -1425,23 +1462,27 @@ see http://opus-codec.org/, f 79;
 #X connect 58 0 36 0;
 #X connect 58 1 21 0;
 #X coords 0 -1 1 1 148 146 1 100 100;
-#X restore 179 136 pd opus;
+#X restore 179 166 pd opus;
 #N canvas 0 22 450 300 config 0;
-#X obj 249 118 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
+#X obj 239 118 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
 -2 -8 0 10 -262144 -1 -1 144 256;
-#X obj 301 118 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
+#X obj 291 118 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
 0 10 -262144 -1 -1 0 256;
-#X obj 188 104 tgl 20 0 ping ping-set ping 25 10 0 12 -261682 -1 -1
-0 1;
-#X obj 104 131 bng 15 250 50 0 list-all list-all-set list_sources_and_sinks
-17 7 0 10 -261682 -1 -1;
-#X obj 352 118 nbx 2 14 1 99 0 0 timefilter timefilter-set timefilter
+#X obj 168 105 bng 15 250 50 0 list-all list-all-set list 17 7 0 10
+-262144 -1 -1;
+#X obj 342 118 nbx 2 14 1 99 0 0 timefilter timefilter-set timefilter
 0 -8 0 10 -262144 -1 -1 1 256;
-#X obj 104 104 tgl 20 0 verbose verbose-set verbose 25 10 0 12 -262144
+#X obj 105 126 bng 15 250 50 0 latency latency-set latency 17 7 0 10
+-262144 -1 -1;
+#X obj 105 105 tgl 15 0 verbose verbose-set verbose 17 7 0 10 -262144
 -1 -1 0 1;
-#X coords 0 -1 1 1 298 51 2 100 100;
+#X obj 157 158 tgl 15 0 ping ping-set ping 17 7 0 10 -262144 -1 -1
+0 1;
+#X obj 105 158 nbx 4 14 1 30000 0 0 ping_time ping_time-set ping_time
+-2 -8 0 10 -262144 -1 -1 1000 256;
+#X coords 0 -1 1 1 298 80 2 100 100;
 #X restore 29 49 pd config;
-#X text 31 106 uncompressed or compressed audio:;
+#X text 31 136 uncompressed or compressed audio:;
 #X text 30 20 printing and transmission config:;
-#X obj 190 298 namecanvas \$0-debug;
+#X obj 190 328 namecanvas \$0-debug;
 #X restore 249 296 pd debug;
