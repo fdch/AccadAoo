@@ -1,0 +1,55 @@
+#N canvas 554 220 450 300 12;
+#X declare -lib aoo -path lib;
+#N canvas 0 22 450 454 (subpatch) 0;
+#X symbolatom 102 102 0 0 0 0 player_name player_name-set player_name
+;
+#X obj 102 150 tgl 15 0 onoff onoff-set onoff 17 7 0 10 -262144 -1
+-1 1 1;
+#X obj 102 128 bng 15 250 50 0 connect connect-set connect 17 7 0 10
+-262144 -1 -1;
+#X obj 102 196 bng 15 250 50 0 disconnect disconnect-set disconnect
+17 7 0 10 -262144 -1 -1;
+#X obj 165 128 tgl 15 0 empty status status 17 7 0 10 -262144 -1 -1
+1 1;
+#X obj 106 247 hradio 15 1 0 8 sink sink-set sink 0 -8 0 10 -262144
+-1 -1 0;
+#X obj 102 174 tgl 15 0 verbose verbose-set verbose 17 7 0 10 -262144
+-1 -1 0 1;
+#X coords 0 -1 1 1 132 115 2 100 100;
+#X restore 111 47 pd;
+#N canvas 0 22 450 300 guts 0;
+#X obj 128 148 _client 10000;
+#X obj 128 196 _stereo-direct 10000;
+#X msg 128 105 connect vrr.iem.at 7077 \$1 testgroup;
+#X obj 128 222 spigot;
+#X obj 128 248 print;
+#X msg 13 114 disconnect;
+#X obj 12 91 r disconnect;
+#X obj 18 164 r onoff;
+#X obj 231 142 s status;
+#X obj 70 37 r connect;
+#X obj 111 70 symbol;
+#X obj 144 36 r player_name;
+#X obj 287 174 r sink;
+#X obj 198 235 r verbose;
+#X obj 249 21 declare -lib aoo -path lib;
+#N canvas 0 22 450 300 loadbang 0;
+#X obj 40 55 loadbang;
+#X msg 40 81 \; pd dsp 1 \; player_name-set symbol type_name_here \;
+;
+#X connect 0 0 1 0;
+#X restore 24 14 pd loadbang;
+#X connect 0 0 1 0;
+#X connect 0 1 8 0;
+#X connect 1 0 3 0;
+#X connect 2 0 0 0;
+#X connect 3 0 4 0;
+#X connect 5 0 0 0;
+#X connect 6 0 5 0;
+#X connect 7 0 1 0;
+#X connect 9 0 10 0;
+#X connect 10 0 2 0;
+#X connect 11 0 10 1;
+#X connect 12 0 1 1;
+#X connect 13 0 3 1;
+#X restore 289 43 pd guts;
