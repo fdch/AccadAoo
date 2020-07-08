@@ -1,5 +1,579 @@
-#N canvas 531 49 399 374 12;
+#N canvas 531 49 503 253 12;
 #X declare -lib aoo -path ./lib;
+#X obj 1 1 cnv 15 500 250 empty empty AccadAoo-1 20 12 0 14 -1 -262144
+0;
+#N canvas 488 23 395 676 status 0;
+#X obj 26 67 cnv 10 318 16 empty status-update type_your_name_and_click_connect:
+3 8 0 12 -232576 -1 0;
+#X obj 26 51 cnv 10 318 15 status status-set offline 45 8 0 12 -233017
+-1 0;
+#X obj 29 55 bng 10 250 50 0 connecting connecting-set empty 17 7 0
+10 -232576 -1 -1;
+#X obj 42 55 bng 10 250 50 0 joining_group joining_group-set empty
+17 7 0 10 -203904 -1 -1;
+#X obj 55 55 tgl 10 0 online online-set empty 17 7 0 10 -204800 -1
+-1 0 1;
+#N canvas 501 129 768 493 pcm 0;
+#X msg 458 124 2;
+#X msg 469 150 3;
+#X msg 475 176 4;
+#X msg 481 201 8;
+#X obj 458 228 t b f;
+#X msg 390 171 44100;
+#X msg 397 195 48000;
+#X msg 381 148 22050;
+#X obj 373 226 t b f;
+#X msg 313 145 64;
+#X msg 322 170 128;
+#X msg 329 194 256;
+#X obj 302 260 pack 64 44100 4;
+#X msg 302 312 format pcm \$1 \$2 \$3;
+#X msg 334 222 512;
+#X obj 303 123 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
+-262144 -1 -1 128 256;
+#X obj 373 124 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
+-262144 -1 -1 44100 256;
+#X text 501 124 16-bit integer;
+#X text 509 151 24-bit integer;
+#X text 512 174 32-bit float;
+#X text 515 201 64-bit float;
+#X text 299 101 blocksize;
+#X text 373 101 samplerate;
+#X text 457 102 bitdepth (default: 4);
+#X text 399 341 all arguments are optional!;
+#X text 310 286 [format pcm <blocksize> <samplerate> <bitdepth>(;
+#X msg 312 341 format pcm;
+#X text 300 74 uncompressed PCM;
+#X obj 302 369 s format;
+#X obj 103 56 namecanvas \$0-pcm-format;
+#N canvas 0 22 450 300 blocksize 0;
+#X obj 38 16 r pcm-blocksize;
+#X obj 38 94 pow;
+#X msg 38 68 2 \$1;
+#X obj 38 42 + 6;
+#X msg 59 178 label \$1;
+#X obj 61 151 makefilename pcm-blocksize:%d;
+#X obj 59 204 s pcm-blocksize-set;
+#X obj 49 230 outlet;
+#X obj 38 120 t f f;
+#X connect 0 0 3 0;
+#X connect 1 0 8 0;
+#X connect 2 0 1 0;
+#X connect 3 0 2 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 0;
+#X connect 8 0 7 0;
+#X connect 8 1 5 0;
+#X restore 304 51 pd blocksize;
+#N canvas 0 22 450 300 samplerate 0;
+#X obj 45 265 outlet;
+#X obj 38 16 r pcm-samplerate;
+#X obj 150 107 samplerate~;
+#X obj 149 81 r pd-dsp-started;
+#X obj 150 133 change;
+#X obj 150 159 s pcm-samplerate-set;
+#X connect 1 0 0 0;
+#X connect 2 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 0;
+#X restore 404 51 pd samplerate;
+#N canvas 0 22 450 300 bitdepth 0;
+#X msg 86 145 label \$1;
+#X obj 38 120 t f f;
+#X obj 49 230 outlet;
+#X obj 38 16 r pcm-bitdepth;
+#X obj 38 42 sel 3;
+#X msg 38 68 8;
+#X obj 72 75 + 2;
+#X obj 86 171 s pcm-bitdepth-set;
+#X obj 88 118 makefilename pcm-bitdepth:%d;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 1 1 8 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 1 6 0;
+#X connect 5 0 1 0;
+#X connect 6 0 1 0;
+#X connect 8 0 0 0;
+#X restore 504 51 pd bitdepth;
+#X obj 166 283 s \$0-pcm-format;
+#X msg 165 253 menu-open;
+#X obj 101 101 cnv 15 146 144 pcm-canvas pcm-canvas-set pcm 20 12 0
+14 -225271 -1 0;
+#X obj 109 152 hradio 15 1 0 8 pcm-blocksize pcm-blocksize-set pcm-blocksize:128
+0 -8 0 10 -262144 -1 -1 1;
+#X obj 109 186 nbx 6 14 8000 192000 0 0 pcm-samplerate pcm-samplerate-set
+pcm-samplerate 0 -8 0 10 -262144 -1 -1 44100 256;
+#X obj 109 219 hradio 15 1 0 4 pcm-bitdepth pcm-bitdepth-set pcm-bitdepth:4
+0 -8 0 10 -262144 -1 -1 2;
+#X obj 190 109 bng 15 250 50 0 pcm pcm-set pcm 17 7 0 10 -262144 -1
+-1;
+#X obj 201 216 bng 15 250 50 0 empty empty more 17 7 0 10 -262144 -1
+-1;
+#X obj 91 343 r pcm;
+#X msg 83 372 \; pcm-blocksize-set 1 \; pcm-samplerate-set 44100 \;
+pcm-bitdepth-set 2;
+#X connect 0 0 4 0;
+#X connect 1 0 4 0;
+#X connect 2 0 4 0;
+#X connect 3 0 4 0;
+#X connect 4 0 12 0;
+#X connect 4 1 12 2;
+#X connect 5 0 8 0;
+#X connect 6 0 8 0;
+#X connect 7 0 8 0;
+#X connect 8 0 12 0;
+#X connect 8 1 12 1;
+#X connect 9 0 12 0;
+#X connect 10 0 12 0;
+#X connect 11 0 12 0;
+#X connect 12 0 13 0;
+#X connect 13 0 28 0;
+#X connect 14 0 12 0;
+#X connect 15 0 12 0;
+#X connect 16 0 8 0;
+#X connect 26 0 28 0;
+#X connect 30 0 15 0;
+#X connect 31 0 16 0;
+#X connect 32 0 4 0;
+#X connect 34 0 33 0;
+#X connect 40 0 34 0;
+#X connect 41 0 42 0;
+#X coords 0 -1 1 1 148 146 1 100 100;
+#X restore 33 229 pd pcm;
+#N canvas 412 4 781 741 opus 0;
+#X obj 101 101 cnv 15 146 144 opus-canvas opus-canvas-set opus 20 12
+0 14 -233017 -1 0;
+#X msg 218 350 48000;
+#X obj 194 403 t b f;
+#X obj 108 144 nbx 5 14 -1e+37 1e+37 0 0 opus-blocksize opus-blocksize-set
+blocksize 0 -8 0 10 -262144 -1 -1 512 256;
+#X obj 108 175 nbx 5 14 -1e+37 1e+37 0 0 opus-samplerate opus-samplerate-set
+samplerate 0 -8 0 10 -262144 -1 -1 48000 256;
+#X text 117 551 [format opus <blocksize> <samplerate> <bitrate> <complexity>
+<signal type>(, f 77;
+#X obj 177 144 nbx 5 14 -1e+37 1e+37 0 0 opus-bitrate opus-bitrate-set
+bitrate/s 0 -8 0 10 -262144 -1 -1 0 256;
+#X msg 302 328 max;
+#X obj 108 206 nbx 5 14 0 10 0 0 opus-complexity opus-complexity-set
+complexity 0 -8 0 10 -262144 -1 -1 0 256;
+#X msg 120 649 format opus;
+#X text 210 649 all arguments are optional!;
+#X msg 292 299 auto;
+#X msg 425 310 auto;
+#X text 543 254 signal type;
+#X msg 645 277 auto;
+#X msg 548 277 music;
+#X msg 596 277 voice;
+#X obj 281 379 t b a;
+#X obj 548 408 t b a;
+#X obj 484 653 text define \$0-opus;
+#X obj 484 601 loadbang;
+#X obj 107 432 t b f;
+#X obj 397 387 t b a;
+#X obj 107 580 list prepend format opus;
+#X obj 107 608 list trim;
+#X obj 139 463 text set \$0-opus 0 0;
+#X obj 226 429 text set \$0-opus 0 1;
+#X obj 313 463 text set \$0-opus 0 2;
+#X obj 429 437 text set \$0-opus 0 3;
+#X obj 580 461 text set \$0-opus 0 4;
+#X obj 580 435 symbol;
+#X obj 429 411 list;
+#X obj 313 404 list;
+#X msg 211 326 24000;
+#X msg 202 303 12000;
+#X msg 107 487 0;
+#X obj 107 520 text get \$0-opus;
+#X msg 116 300 128;
+#X msg 122 325 256;
+#X msg 128 349 512;
+#X msg 134 373 1024;
+#X msg 141 398 2048;
+#X text 130 45 Opus is a high quality codec for compressed audio \,
+see http://opus-codec.org/, f 79;
+#X obj 107 679 s format;
+#X obj 577 113 namecanvas \$0-opus-format;
+#X obj 192 108 bng 15 250 50 0 opus opus-set opus 17 7 0 10 -262144
+-1 -1;
+#X obj 265 215 s \$0-opus-format;
+#X msg 265 189 menu-open;
+#X obj 177 175 hradio 15 1 0 3 opus-type opus-type-set mus|voc|aut
+0 -8 0 10 -262144 -1 -1 2;
+#X obj 99 252 r opus-blocksize;
+#X obj 168 279 r opus-samplerate;
+#X obj 296 258 r opus-bitrate;
+#X obj 403 279 r opus-complexity;
+#X obj 558 202 r opus-type;
+#X obj 558 228 sel 0 1 2;
+#X obj 200 215 bng 15 250 50 0 empty empty more 17 7 0 10 -262144 -1
+-1;
+#X obj 381 581 r opus;
+#X obj 379 615 t b b;
+#X msg 484 625 set 512 48000 auto auto auto;
+#X connect 1 0 2 0;
+#X connect 2 0 35 0;
+#X connect 2 1 26 0;
+#X connect 7 0 17 0;
+#X connect 9 0 43 0;
+#X connect 11 0 17 0;
+#X connect 12 0 22 0;
+#X connect 14 0 18 0;
+#X connect 15 0 18 0;
+#X connect 16 0 18 0;
+#X connect 17 0 35 0;
+#X connect 17 1 32 0;
+#X connect 18 0 35 0;
+#X connect 18 1 30 0;
+#X connect 20 0 58 0;
+#X connect 21 0 35 0;
+#X connect 21 1 25 0;
+#X connect 22 0 35 0;
+#X connect 22 1 31 0;
+#X connect 23 0 24 0;
+#X connect 24 0 43 0;
+#X connect 30 0 29 0;
+#X connect 31 0 28 0;
+#X connect 32 0 27 0;
+#X connect 33 0 2 0;
+#X connect 34 0 2 0;
+#X connect 35 0 36 0;
+#X connect 36 0 23 0;
+#X connect 37 0 21 0;
+#X connect 38 0 21 0;
+#X connect 39 0 21 0;
+#X connect 40 0 21 0;
+#X connect 41 0 21 0;
+#X connect 47 0 46 0;
+#X connect 49 0 21 0;
+#X connect 50 0 2 0;
+#X connect 51 0 17 0;
+#X connect 52 0 22 0;
+#X connect 53 0 54 0;
+#X connect 54 0 15 0;
+#X connect 54 1 16 0;
+#X connect 54 2 14 0;
+#X connect 55 0 47 0;
+#X connect 56 0 57 0;
+#X connect 57 0 35 0;
+#X connect 57 1 58 0;
+#X connect 58 0 19 0;
+#X coords 0 -1 1 1 148 146 1 100 100;
+#X restore 183 229 pd opus;
+#X obj 185 17 namecanvas \$0-advanced;
+#X text 31 14 ADVANCED SETTINGS;
+#N canvas 504 220 711 375 setup 0;
+#X obj 331 254 setctl port;
+#X obj 331 104 setctl username symbol;
+#X obj 331 134 setctl group_join symbol;
+#X obj 331 164 setctl send_to symbol;
+#X obj 331 224 setctl hostname symbol;
+#X obj 331 194 setctl receive_from symbol;
+#X obj 101 101 cnv 15 214 95 empty empty client 0 8 0 14 -261682 -1
+0;
+#X symbolatom 209 143 0 0 0 0 username username-set username;
+#X symbolatom 209 169 0 0 0 0 group_join group_join-set group_join
+;
+#X obj 101 288 cnv 15 214 70 empty empty server 0 8 0 14 -204800 -1
+0;
+#X symbolatom 169 307 0 0 0 0 hostname hostname-set hostname;
+#X floatatom 169 331 0 0 0 0 port port-set port;
+#X obj 210 123 bng 15 250 50 0 load load-set (re)load 17 7 0 10 -4032
+-1 -1;
+#X obj 105 123 bng 15 250 50 0 open open-set setup_file 17 7 0 10 -257985
+-1 -1;
+#X obj 184 103 bng 15 250 50 0 default default-set default 17 7 0 10
+-232576 -1 -1;
+#X obj 101 197 cnv 15 214 90 empty empty peers 0 8 0 14 -203904 -1
+0;
+#X symbolatom 208 213 0 0 0 0 send_to send_to-set send_to;
+#X symbolatom 208 250 0 0 0 0 receive_from receive_from-set receive_from
+;
+#X obj 548 231 hradio 10 1 0 8 sink-id sink-id-set sink-id 0 -8 0 10
+-262144 -1 -1 0;
+#X obj 548 315 hradio 10 1 0 8 peer-source-id peer-source-id-set peer-source-id
+0 -8 0 10 -262144 -1 -1 3;
+#X obj 548 291 hradio 10 1 0 8 peer-sink-id peer-sink-id-set peer-sink-id
+0 -8 0 10 -262144 -1 -1 4;
+#X obj 548 255 hradio 10 1 0 8 source-id source-id source-id 0 -8 0
+10 -262144 -1 -1 1;
+#X coords 0 -1 1 1 216 259 2 100 100;
+#X restore 29 381 pd setup;
+#X obj 26 84 cnv 15 318 30 empty empty empty 35 8 0 12 -261682 -1 0
+;
+#X symbolatom 88 88 0 0 0 0 username username-set username;
+#X obj 26 115 cnv 15 318 30 empty empty empty 35 8 0 12 -203904 -1
+0;
+#X obj 29 121 tgl 20 0 connect connect-set connect 25 10 0 12 -4034
+-1 -1 0 1;
+#X obj 112 121 tgl 20 0 start start-set start 25 10 0 12 -258113 -1
+-1 0 1;
+#X obj 252 121 bng 20 250 50 0 advanced advanced-set advanced 25 10
+0 12 -204800 -1 -1;
+#X obj 179 121 bng 20 250 50 0 peers peers-set peers 25 10 0 12 -261682
+-1 -1;
+#X obj 294 53 tgl 10 0 test-send test-send-set empty 14 5 0 10 -262130
+-1 -1 0 1;
+#X obj 280 53 tgl 10 0 adc-switch adc-switch-set empty 17 7 0 10 -204786
+-1 -1 1 1;
+#X obj 26 146 cnv 15 318 35 empty empty empty 35 8 0 12 -232576 -1
+0;
+#X obj 129 162 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
+-2 -8 0 10 -262144 -1 -1 512 256;
+#X obj 205 162 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
+0 10 -262144 -1 -1 20 256;
+#X obj 277 162 nbx 2 14 1 99 0 0 timefilter timefilter-set timefilter
+0 -8 0 10 -262144 -1 -1 1 256;
+#X obj 41 154 bng 20 250 50 0 latency latency-set latency 25 10 0 12
+-262144 -1 -1;
+#X obj 26 182 cnv 30 318 35 empty empty empty 35 8 0 12 -261682 -1
+0;
+#X obj 205 192 tgl 20 0 ping ping-set ping 25 10 0 12 -262144 -1 -1
+1 1;
+#X obj 129 198 nbx 4 14 1 30000 0 0 ping_time ping_time-set ping_time
+-2 -8 0 10 -262144 -1 -1 1000 256;
+#X obj 279 192 bng 20 250 50 0 list-all list-all-set list 25 10 0 12
+-262144 -1 -1;
+#X obj 41 192 tgl 20 0 verbose verbose-set verbose 25 10 0 12 -262144
+-1 -1 1 1;
+#X obj 308 53 tgl 10 0 compression compression-set pcm 12 5 0 10 -232576
+-1 -1 0 1;
+#N canvas 261 220 450 300 dummy 0;
+#X obj 16 169 pd~ -ninsig 2 -noutsig 2;
+#X obj 95 120 osc~ 330;
+#X obj 167 132 osc~ 555;
+#X obj 89 210 env~;
+#X floatatom 89 236 5 0 0 0 - - -;
+#X obj 166 205 env~;
+#X floatatom 166 231 5 0 0 0 - - -;
+#X msg 95 72 pd~ stop;
+#X msg 16 17 pd~ start -nogui player.pd;
+#X msg 242 94 onoff \$1;
+#X obj 242 73 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 43 45 player_name symbol dog \, connect bang;
+#N canvas 116 105 1005 652 dummies 0;
+#X obj 321 11 cnv 15 138 158 dummies-cnv dummies-cnv-set dummies 10
+12 0 14 -233017 -1 0;
+#X msg 41 175 pd~ stop;
+#X obj 73 239 pdcontrol;
+#X obj 73 291 list trim;
+#X msg 44 89 9999 9998 9988 9888;
+#X obj 44 115 unpack f f f f;
+#X msg 251 175 pd~ stop;
+#X obj 283 239 pdcontrol;
+#X obj 283 291 list trim;
+#X msg 282 205 dir 0 lib/_dummy-\$1.pd;
+#X msg 491 175 pd~ stop;
+#X obj 523 239 pdcontrol;
+#X obj 523 291 list trim;
+#X msg 522 205 dir 0 lib/_dummy-\$1.pd;
+#X msg 691 175 pd~ stop;
+#X obj 723 239 pdcontrol;
+#X obj 723 291 list trim;
+#X msg 722 205 dir 0 lib/_dummy-\$1.pd;
+#X obj 632 135 bng 15 250 50 0 empty empty stop 17 7 0 10 -262144 -1
+-1;
+#X obj 328 71 tgl 15 0 empty empty a 17 7 0 10 -262144 -1 -1 0 1;
+#X obj 92 346 *~ 0.01;
+#X obj 92 372 *~;
+#X obj 20 407 pd~ -ninsig 1 -noutsig 2 -fifo 5;
+#X obj 278 416 pd~ -ninsig 1 -noutsig 2 -fifo 5;
+#X obj 522 418 pd~ -ninsig 1 -noutsig 2 -fifo 5;
+#X obj 764 418 pd~ -ninsig 1 -noutsig 2 -fifo 5;
+#X obj 124 373 osc~ 440;
+#X obj 328 95 tgl 15 0 empty empty c 17 7 0 10 -262144 -1 -1 0 1;
+#X obj 302 346 *~ 0.01;
+#X obj 302 372 *~;
+#X obj 328 119 tgl 15 0 empty empty e 17 7 0 10 -262144 -1 -1 0 1;
+#X obj 532 346 *~ 0.01;
+#X obj 532 372 *~;
+#X obj 328 143 tgl 15 0 empty empty a' 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 802 346 *~ 0.01;
+#X obj 802 372 *~;
+#X obj 564 373 osc~ 667;
+#X obj 834 373 osc~ 889;
+#X obj 109 455 env~;
+#X floatatom 377 71 5 0 0 0 - - -;
+#X obj 199 455 env~;
+#X floatatom 417 71 5 0 0 0 - - -;
+#X obj 143 525 *~;
+#X obj 590 623 dac~;
+#X obj 173 525 *~;
+#X obj 356 71 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 379 455 env~;
+#X floatatom 377 95 5 0 0 0 - - -;
+#X obj 469 455 env~;
+#X floatatom 417 95 5 0 0 0 - - -;
+#X obj 413 525 *~;
+#X obj 443 525 *~;
+#X obj 356 95 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 619 455 env~;
+#X floatatom 377 119 5 0 0 0 - - -;
+#X obj 709 455 env~;
+#X floatatom 417 119 5 0 0 0 - - -;
+#X obj 653 525 *~;
+#X obj 683 525 *~;
+#X obj 356 119 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 859 455 env~;
+#X floatatom 377 143 5 0 0 0 - - -;
+#X obj 949 455 env~;
+#X floatatom 417 143 5 0 0 0 - - -;
+#X obj 893 525 *~;
+#X obj 923 525 *~;
+#X obj 356 143 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 72 205 dir 0 lib/_dummy-\$1.pd;
+#X obj 73 265 list prepend pd~ start -nogui;
+#X obj 283 265 list prepend pd~ start -nogui;
+#X obj 523 265 list prepend pd~ start -nogui;
+#X obj 723 265 list prepend pd~ start -nogui;
+#X obj 334 373 osc~ 556;
+#X obj 84 28 bng 15 250 50 0 empty empty start 17 7 0 10 -262144 -1
+-1;
+#X obj 331 57 tgl 10 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 358 57 tgl 10 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 83 55 start;
+#X text 86 328 send dummy sig;
+#X text 159 500 dummy receive;
+#X text 9 169 stop;
+#X obj 438 17 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 540 98 sel 0 1;
+#X obj 711 21 sel 0 1;
+#X msg 694 98 \; dummies-cnv-set color \$1 0 22 \;;
+#X msg 694 62 10;
+#X msg 743 60 6;
+#X obj 530 22 t a a a a;
+#X obj 837 15 switch~;
+#X obj 159 25 del 100;
+#X connect 1 0 22 0;
+#X connect 2 0 68 0;
+#X connect 3 0 22 0;
+#X connect 4 0 5 0;
+#X connect 5 0 67 0;
+#X connect 5 1 9 0;
+#X connect 5 2 13 0;
+#X connect 5 3 17 0;
+#X connect 6 0 23 0;
+#X connect 7 0 69 0;
+#X connect 8 0 23 0;
+#X connect 9 0 7 0;
+#X connect 10 0 24 0;
+#X connect 11 0 70 0;
+#X connect 12 0 24 0;
+#X connect 13 0 11 0;
+#X connect 14 0 25 0;
+#X connect 15 0 71 0;
+#X connect 16 0 25 0;
+#X connect 17 0 15 0;
+#X connect 18 0 1 0;
+#X connect 18 0 14 0;
+#X connect 18 0 10 0;
+#X connect 18 0 6 0;
+#X connect 19 0 20 0;
+#X connect 20 0 21 0;
+#X connect 21 0 22 0;
+#X connect 22 1 38 0;
+#X connect 22 1 42 0;
+#X connect 22 2 40 0;
+#X connect 22 2 44 0;
+#X connect 23 1 46 0;
+#X connect 23 1 50 0;
+#X connect 23 2 48 0;
+#X connect 23 2 51 0;
+#X connect 24 1 53 0;
+#X connect 24 1 57 0;
+#X connect 24 2 55 0;
+#X connect 24 2 58 0;
+#X connect 25 1 60 0;
+#X connect 25 1 64 0;
+#X connect 25 2 62 0;
+#X connect 25 2 65 0;
+#X connect 26 0 21 1;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X connect 29 0 23 0;
+#X connect 30 0 31 0;
+#X connect 31 0 32 0;
+#X connect 32 0 24 0;
+#X connect 33 0 34 0;
+#X connect 34 0 35 0;
+#X connect 35 0 25 0;
+#X connect 36 0 32 1;
+#X connect 37 0 35 1;
+#X connect 38 0 39 0;
+#X connect 40 0 41 0;
+#X connect 42 0 43 0;
+#X connect 44 0 43 1;
+#X connect 45 0 42 1;
+#X connect 45 0 44 1;
+#X connect 46 0 47 0;
+#X connect 48 0 49 0;
+#X connect 50 0 43 0;
+#X connect 51 0 43 1;
+#X connect 52 0 50 1;
+#X connect 52 0 51 1;
+#X connect 53 0 54 0;
+#X connect 55 0 56 0;
+#X connect 57 0 43 0;
+#X connect 58 0 43 1;
+#X connect 59 0 57 1;
+#X connect 59 0 58 1;
+#X connect 60 0 61 0;
+#X connect 62 0 63 0;
+#X connect 64 0 43 0;
+#X connect 65 0 43 1;
+#X connect 66 0 64 1;
+#X connect 66 0 65 1;
+#X connect 67 0 2 0;
+#X connect 68 0 3 0;
+#X connect 69 0 8 0;
+#X connect 70 0 12 0;
+#X connect 71 0 16 0;
+#X connect 72 0 29 1;
+#X connect 73 0 4 0;
+#X connect 74 0 33 0;
+#X connect 74 0 30 0;
+#X connect 74 0 27 0;
+#X connect 74 0 19 0;
+#X connect 75 0 45 0;
+#X connect 75 0 52 0;
+#X connect 75 0 59 0;
+#X connect 75 0 66 0;
+#X connect 80 0 86 0;
+#X connect 81 0 18 0;
+#X connect 81 1 88 0;
+#X connect 82 0 84 0;
+#X connect 82 1 85 0;
+#X connect 84 0 83 0;
+#X connect 85 0 83 0;
+#X connect 86 0 74 0;
+#X connect 86 1 81 0;
+#X connect 86 2 82 0;
+#X connect 86 3 87 0;
+#X connect 88 0 73 0;
+#X coords 0 -1 1 1 140 160 2 320 10;
+#X restore 252 125 pd dummies;
+#X connect 0 1 3 0;
+#X connect 0 2 5 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
+#X connect 3 0 4 0;
+#X connect 5 0 6 0;
+#X connect 7 0 0 0;
+#X connect 8 0 0 0;
+#X connect 9 0 0 0;
+#X connect 10 0 9 0;
+#X connect 11 0 0 0;
+#X restore 253 384 pd dummy;
 #N canvas 933 48 256 496 guts 0;
 #N canvas 139 67 709 560 setup 0;
 #X obj 270 242 t b p;
@@ -150,7 +724,7 @@
 #X connect 16 0 7 0;
 #X restore 23 146 pd connect;
 #N canvas 83 0 447 269 gui-glue 0;
-#N canvas 362 24 918 645 formats 0;
+#N canvas 155 54 918 645 formats 0;
 #X obj 73 8 r format;
 #X obj 91 151 list split 2;
 #X obj 97 218 list split 1;
@@ -193,6 +767,12 @@ color \$2 0 22;
 #X obj 533 306 sel 8;
 #X msg 533 332 3;
 #X obj 567 339 - 2;
+#X msg 612 208 \; compression-set set 1 \, label opus;
+#X msg 672 287 \; compression-set set 0 \, label pcm;
+#X obj 686 14 r compression;
+#X obj 686 40 sel 0 1;
+#X msg 686 66 \; pcm-set bang;
+#X msg 785 61 \; opus-set bang;
 #X connect 0 0 33 0;
 #X connect 1 0 4 0;
 #X connect 1 1 10 0;
@@ -222,8 +802,10 @@ color \$2 0 22;
 #X connect 22 0 37 0;
 #X connect 25 0 1 0;
 #X connect 25 1 31 0;
+#X connect 25 1 40 0;
 #X connect 26 0 18 0;
 #X connect 26 1 32 0;
+#X connect 26 1 41 0;
 #X connect 27 0 28 0;
 #X connect 27 1 29 0;
 #X connect 28 0 30 0;
@@ -237,6 +819,9 @@ color \$2 0 22;
 #X connect 37 1 39 0;
 #X connect 38 0 24 0;
 #X connect 39 0 24 0;
+#X connect 42 0 43 0;
+#X connect 43 0 44 0;
+#X connect 43 1 45 0;
 #X restore 39 70 pd formats;
 #X text 39 6 gui-feedback logic;
 #N canvas 0 22 1035 756 status 0;
@@ -297,7 +882,6 @@ color \$2 0 22;
 #X obj 40 601 ==;
 #X obj 37 637 sel 0 1;
 #X msg 650 575 label waiting_for_peers...;
-#X msg 548 511 label type_your_name_and_click_connect;
 #X obj 60 668 s connecting-set;
 #X obj 647 548 r connecting;
 #X msg 343 325 label online__(\$2|\$1);
@@ -325,9 +909,10 @@ are no peers connected, f 16;
 #X obj 396 560 list prepend;
 #X msg 553 598 1;
 #X msg 587 596 0;
+#X msg 548 511 label type_your_name_and_click_connect:;
 #X connect 0 0 1 0;
 #X connect 1 0 18 0;
-#X connect 1 1 67 0;
+#X connect 1 1 66 0;
 #X connect 2 0 3 0;
 #X connect 3 0 10 1;
 #X connect 4 0 37 0;
@@ -339,12 +924,12 @@ are no peers connected, f 16;
 #X connect 13 0 12 0;
 #X connect 14 0 23 0;
 #X connect 15 0 23 0;
-#X connect 16 0 62 0;
+#X connect 16 0 61 0;
 #X connect 17 0 34 0;
-#X connect 17 1 61 0;
+#X connect 17 1 60 0;
 #X connect 18 0 10 0;
 #X connect 19 0 20 0;
-#X connect 19 0 64 0;
+#X connect 19 0 63 0;
 #X connect 20 0 21 0;
 #X connect 21 0 9 0;
 #X connect 22 0 8 0;
@@ -370,7 +955,7 @@ are no peers connected, f 16;
 #X connect 38 0 6 0;
 #X connect 38 1 39 0;
 #X connect 39 0 40 0;
-#X connect 41 0 60 0;
+#X connect 41 0 59 0;
 #X connect 42 0 43 0;
 #X connect 43 0 47 0;
 #X connect 43 1 45 0;
@@ -382,41 +967,41 @@ are no peers connected, f 16;
 #X connect 48 0 49 0;
 #X connect 49 0 52 0;
 #X connect 51 0 44 0;
-#X connect 52 0 69 0;
+#X connect 52 0 68 0;
 #X connect 53 0 50 0;
 #X connect 54 0 55 0;
 #X connect 55 0 42 0;
-#X connect 55 1 58 0;
+#X connect 55 1 57 0;
 #X connect 56 0 50 0;
-#X connect 57 0 50 0;
-#X connect 59 0 56 0;
-#X connect 60 0 24 0;
-#X connect 61 0 14 0;
-#X connect 61 1 33 0;
-#X connect 61 2 57 0;
-#X connect 62 0 51 0;
-#X connect 62 1 17 0;
-#X connect 62 2 19 0;
-#X connect 62 3 7 0;
-#X connect 65 0 66 0;
-#X connect 67 0 65 0;
-#X connect 68 0 49 0;
-#X connect 69 0 76 0;
-#X connect 70 0 53 0;
-#X connect 71 0 75 0;
-#X connect 72 0 73 0;
-#X connect 74 0 72 0;
-#X connect 75 0 70 0;
-#X connect 76 0 80 0;
-#X connect 76 1 77 0;
-#X connect 77 0 78 0;
-#X connect 78 0 81 0;
-#X connect 78 1 82 0;
-#X connect 79 0 71 0;
-#X connect 79 1 70 0;
-#X connect 80 0 79 0;
-#X connect 81 0 80 1;
-#X connect 82 0 80 1;
+#X connect 58 0 56 0;
+#X connect 59 0 24 0;
+#X connect 60 0 14 0;
+#X connect 60 1 33 0;
+#X connect 60 2 82 0;
+#X connect 61 0 51 0;
+#X connect 61 1 17 0;
+#X connect 61 2 19 0;
+#X connect 61 3 7 0;
+#X connect 64 0 65 0;
+#X connect 66 0 64 0;
+#X connect 67 0 49 0;
+#X connect 68 0 75 0;
+#X connect 69 0 53 0;
+#X connect 70 0 74 0;
+#X connect 71 0 72 0;
+#X connect 73 0 71 0;
+#X connect 74 0 69 0;
+#X connect 75 0 79 0;
+#X connect 75 1 76 0;
+#X connect 76 0 77 0;
+#X connect 77 0 80 0;
+#X connect 77 1 81 0;
+#X connect 78 0 70 0;
+#X connect 78 1 69 0;
+#X connect 79 0 78 0;
+#X connect 80 0 79 1;
+#X connect 81 0 79 1;
+#X connect 82 0 50 0;
 #X restore 39 37 pd status;
 #N canvas 0 22 450 300 report-peers 0;
 #X obj 40 35 r peers;
@@ -568,7 +1153,7 @@ allows:;
 #X obj 256 37 r test-send;
 #X obj 278 100 switch~;
 #X obj 53 22 metro 400;
-#X obj 53 48 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 53 48 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X obj 53 68 sel 0 1;
 #X msg 110 145 1 10 \, 0.6 100 10 \, 0 200 110;
@@ -1036,7 +1621,7 @@ player name was specified.;
 1000);
 #X msg 363 413 ping \$1;
 #X obj 363 362 nbx 5 14 -1e+37 1e+37 0 0 empty ping ping 0 -8 0 10
--262144 -1 -1 0 256;
+-262144 -1 -1 1 256;
 #X text 429 413 set ping interval in ms (default: 1000) \, 0 = off
 ;
 #X msg 346 317 accept \$1;
@@ -1381,574 +1966,8 @@ or out of sync), f 47;
 #X connect 14 0 6 0;
 #X connect 15 0 5 0;
 #X restore 23 394 pd signals;
-#X restore 249 319 pd guts;
-#N canvas 504 220 711 375 setup 0;
-#X obj 331 254 setctl port;
-#X obj 331 104 setctl username symbol;
-#X obj 331 134 setctl group_join symbol;
-#X obj 331 164 setctl send_to symbol;
-#X obj 331 224 setctl hostname symbol;
-#X obj 331 194 setctl receive_from symbol;
-#X obj 101 101 cnv 15 214 95 empty empty client 0 8 0 14 -261682 -1
-0;
-#X symbolatom 209 143 0 0 0 0 username username-set username;
-#X symbolatom 209 169 0 0 0 0 group_join group_join-set group_join
-;
-#X obj 101 288 cnv 15 214 70 empty empty server 0 8 0 14 -204800 -1
-0;
-#X symbolatom 169 307 0 0 0 0 hostname hostname-set hostname;
-#X floatatom 169 331 0 0 0 0 port port-set port;
-#X obj 210 123 bng 15 250 50 0 load load-set (re)load 17 7 0 10 -4032
--1 -1;
-#X obj 105 123 bng 15 250 50 0 open open-set setup_file 17 7 0 10 -257985
--1 -1;
-#X obj 144 103 bng 15 250 50 0 default default-set default 17 7 0 10
--232576 -1 -1;
-#X obj 101 197 cnv 15 214 90 empty empty peers 0 8 0 14 -203904 -1
-0;
-#X symbolatom 208 213 0 0 0 0 send_to send_to-set send_to;
-#X symbolatom 208 250 0 0 0 0 receive_from receive_from-set receive_from
-;
-#X obj 548 231 hradio 10 1 0 8 sink-id sink-id-set sink-id 0 -8 0 10
--262144 -1 -1 0;
-#X obj 548 315 hradio 10 1 0 8 peer-source-id peer-source-id-set peer-source-id
-0 -8 0 10 -262144 -1 -1 3;
-#X obj 548 291 hradio 10 1 0 8 peer-sink-id peer-sink-id-set peer-sink-id
-0 -8 0 10 -262144 -1 -1 4;
-#X obj 548 255 hradio 10 1 0 8 source-id source-id source-id 0 -8 0
-10 -262144 -1 -1 1;
-#X coords 0 -1 1 1 216 259 2 100 100;
-#X restore 28 82 pd setup;
-#N canvas 883 49 368 694 status 0;
-#X obj 26 51 cnv 15 318 15 empty status-update type_your_name_and_click_connect
-20 8 0 12 -232576 -1 0;
-#X obj 26 67 cnv 15 318 48 status status-set offline 20 10 0 14 -233017
--1 0;
-#X obj 29 53 bng 10 250 50 0 connecting connecting-set empty 17 7 0
-10 -232576 -1 -1;
-#X obj 29 75 bng 10 250 50 0 joining_group joining_group-set empty
-17 7 0 10 -203904 -1 -1;
-#X obj 29 98 tgl 10 0 online online-set empty 17 7 0 10 -204800 -1
--1 0 1;
-#X obj 48 93 tgl 20 0 connect connect-set connect 25 10 0 12 -4034
--1 -1 0 1;
-#X obj 128 93 tgl 20 0 start start-set start 25 10 0 12 -258113 -1
--1 0 1;
-#X obj 256 93 bng 20 250 50 0 advanced advanced-set advanced 25 10
-0 12 -204800 -1 -1;
-#X obj 189 93 bng 20 250 50 0 peers peers-set peers 25 10 0 12 -261682
--1 -1;
-#N canvas 501 129 768 493 pcm 0;
-#X msg 458 124 2;
-#X msg 469 150 3;
-#X msg 475 176 4;
-#X msg 481 201 8;
-#X obj 458 228 t b f;
-#X msg 390 171 44100;
-#X msg 397 195 48000;
-#X msg 381 148 22050;
-#X obj 373 226 t b f;
-#X msg 313 145 64;
-#X msg 322 170 128;
-#X msg 329 194 256;
-#X obj 302 260 pack 64 44100 4;
-#X msg 302 312 format pcm \$1 \$2 \$3;
-#X msg 334 222 512;
-#X obj 303 123 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
--262144 -1 -1 128 256;
-#X obj 373 124 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
--262144 -1 -1 44100 256;
-#X text 501 124 16-bit integer;
-#X text 509 151 24-bit integer;
-#X text 512 174 32-bit float;
-#X text 515 201 64-bit float;
-#X text 299 101 blocksize;
-#X text 373 101 samplerate;
-#X text 457 102 bitdepth (default: 4);
-#X text 399 341 all arguments are optional!;
-#X text 310 286 [format pcm <blocksize> <samplerate> <bitdepth>(;
-#X msg 312 341 format pcm;
-#X text 300 74 uncompressed PCM;
-#X obj 302 369 s format;
-#X obj 103 56 namecanvas \$0-pcm-format;
-#N canvas 0 22 450 300 blocksize 0;
-#X obj 38 16 r pcm-blocksize;
-#X obj 38 94 pow;
-#X msg 38 68 2 \$1;
-#X obj 38 42 + 6;
-#X msg 59 178 label \$1;
-#X obj 61 151 makefilename pcm-blocksize:%d;
-#X obj 59 204 s pcm-blocksize-set;
-#X obj 49 230 outlet;
-#X obj 38 120 t f f;
-#X connect 0 0 3 0;
-#X connect 1 0 8 0;
-#X connect 2 0 1 0;
-#X connect 3 0 2 0;
-#X connect 4 0 6 0;
-#X connect 5 0 4 0;
-#X connect 8 0 7 0;
-#X connect 8 1 5 0;
-#X restore 304 51 pd blocksize;
-#N canvas 0 22 450 300 samplerate 0;
-#X obj 45 265 outlet;
-#X obj 38 16 r pcm-samplerate;
-#X obj 150 107 samplerate~;
-#X obj 149 81 r pd-dsp-started;
-#X obj 150 133 change;
-#X obj 150 159 s pcm-samplerate-set;
-#X connect 1 0 0 0;
-#X connect 2 0 4 0;
-#X connect 3 0 2 0;
-#X connect 4 0 5 0;
-#X restore 404 51 pd samplerate;
-#N canvas 0 22 450 300 bitdepth 0;
-#X msg 86 145 label \$1;
-#X obj 38 120 t f f;
-#X obj 49 230 outlet;
-#X obj 38 16 r pcm-bitdepth;
-#X obj 38 42 sel 3;
-#X msg 38 68 8;
-#X obj 72 75 + 2;
-#X obj 86 171 s pcm-bitdepth-set;
-#X obj 88 118 makefilename pcm-bitdepth:%d;
-#X connect 0 0 7 0;
-#X connect 1 0 2 0;
-#X connect 1 1 8 0;
-#X connect 3 0 4 0;
-#X connect 4 0 5 0;
-#X connect 4 1 6 0;
-#X connect 5 0 1 0;
-#X connect 6 0 1 0;
-#X connect 8 0 0 0;
-#X restore 504 51 pd bitdepth;
-#X obj 166 283 s \$0-pcm-format;
-#X msg 165 253 menu-open;
-#X obj 101 101 cnv 15 146 144 pcm-canvas pcm-canvas-set pcm 20 12 0
-14 -225271 -1 0;
-#X obj 109 152 hradio 15 1 0 8 pcm-blocksize pcm-blocksize-set pcm-blocksize:128
-0 -8 0 10 -262144 -1 -1 1;
-#X obj 109 186 nbx 6 14 8000 192000 0 0 pcm-samplerate pcm-samplerate-set
-pcm-samplerate 0 -8 0 10 -262144 -1 -1 44100 256;
-#X obj 109 219 hradio 15 1 0 4 pcm-bitdepth pcm-bitdepth-set pcm-bitdepth:4
-0 -8 0 10 -262144 -1 -1 2;
-#X obj 190 109 bng 15 250 50 0 pcm pcm-set pcm 17 7 0 10 -262144 -1
--1;
-#X obj 201 216 bng 15 250 50 0 empty empty more 17 7 0 10 -262144 -1
--1;
-#X obj 91 343 r pcm;
-#X msg 83 372 \; pcm-blocksize-set 1 \; pcm-samplerate-set 44100 \;
-pcm-bitdepth-set 2 \;;
-#X connect 0 0 4 0;
-#X connect 1 0 4 0;
-#X connect 2 0 4 0;
-#X connect 3 0 4 0;
-#X connect 4 0 12 0;
-#X connect 4 1 12 2;
-#X connect 5 0 8 0;
-#X connect 6 0 8 0;
-#X connect 7 0 8 0;
-#X connect 8 0 12 0;
-#X connect 8 1 12 1;
-#X connect 9 0 12 0;
-#X connect 10 0 12 0;
-#X connect 11 0 12 0;
-#X connect 12 0 13 0;
-#X connect 13 0 28 0;
-#X connect 14 0 12 0;
-#X connect 15 0 12 0;
-#X connect 16 0 8 0;
-#X connect 26 0 28 0;
-#X connect 30 0 15 0;
-#X connect 31 0 16 0;
-#X connect 32 0 4 0;
-#X connect 34 0 33 0;
-#X connect 40 0 34 0;
-#X connect 41 0 42 0;
-#X coords 0 -1 1 1 148 146 1 100 100;
-#X restore 31 280 pd pcm;
-#N canvas 412 4 781 741 opus 0;
-#X obj 101 101 cnv 15 146 144 opus-canvas opus-canvas-set opus 20 12
-0 14 -233017 -1 0;
-#X msg 218 350 48000;
-#X obj 194 403 t b f;
-#X obj 108 144 nbx 5 14 -1e+37 1e+37 0 0 opus-blocksize opus-blocksize-set
-blocksize 0 -8 0 10 -262144 -1 -1 0 256;
-#X obj 108 175 nbx 5 14 -1e+37 1e+37 0 0 opus-samplerate opus-samplerate-set
-samplerate 0 -8 0 10 -262144 -1 -1 0 256;
-#X text 117 551 [format opus <blocksize> <samplerate> <bitrate> <complexity>
-<signal type>(, f 77;
-#X obj 177 144 nbx 5 14 -1e+37 1e+37 0 0 opus-bitrate opus-bitrate-set
-bitrate/s 0 -8 0 10 -262144 -1 -1 0 256;
-#X msg 302 328 max;
-#X obj 108 206 nbx 5 14 0 10 0 0 opus-complexity opus-complexity-set
-complexity 0 -8 0 10 -262144 -1 -1 0 256;
-#X msg 120 649 format opus;
-#X text 210 649 all arguments are optional!;
-#X msg 292 299 auto;
-#X msg 425 310 auto;
-#X text 543 254 signal type;
-#X msg 645 277 auto;
-#X msg 548 277 music;
-#X msg 596 277 voice;
-#X obj 281 379 t b a;
-#X obj 548 408 t b a;
-#X obj 461 666 text define \$0-opus;
-#X obj 461 614 loadbang;
-#X msg 461 638 set 512 48000 auto auto auto;
-#X obj 107 432 t b f;
-#X obj 397 387 t b a;
-#X obj 107 580 list prepend format opus;
-#X obj 107 608 list trim;
-#X obj 139 463 text set \$0-opus 0 0;
-#X obj 226 429 text set \$0-opus 0 1;
-#X obj 313 463 text set \$0-opus 0 2;
-#X obj 429 437 text set \$0-opus 0 3;
-#X obj 580 461 text set \$0-opus 0 4;
-#X obj 580 435 symbol;
-#X obj 429 411 list;
-#X obj 313 404 list;
-#X msg 211 326 24000;
-#X msg 202 303 12000;
-#X msg 107 487 0;
-#X obj 107 520 text get \$0-opus;
-#X msg 116 300 128;
-#X msg 122 325 256;
-#X msg 128 349 512;
-#X msg 134 373 1024;
-#X msg 141 398 2048;
-#X text 130 45 Opus is a high quality codec for compressed audio \,
-see http://opus-codec.org/, f 79;
-#X obj 107 679 s format;
-#X obj 577 113 namecanvas \$0-opus-format;
-#X obj 192 108 bng 15 250 50 0 opus opus-set opus 17 7 0 10 -262144
--1 -1;
-#X obj 265 215 s \$0-opus-format;
-#X msg 265 189 menu-open;
-#X obj 177 175 hradio 15 1 0 3 opus-type opus-type-set mus|voc|aut
-0 -8 0 10 -262144 -1 -1 2;
-#X obj 99 252 r opus-blocksize;
-#X obj 168 279 r opus-samplerate;
-#X obj 296 258 r opus-bitrate;
-#X obj 403 279 r opus-complexity;
-#X obj 558 202 r opus-type;
-#X obj 558 228 sel 0 1 2;
-#X obj 200 215 bng 15 250 50 0 empty empty more 17 7 0 10 -262144 -1
--1;
-#X obj 381 581 r opus;
-#X obj 379 615 t b b;
-#X connect 1 0 2 0;
-#X connect 2 0 36 0;
-#X connect 2 1 27 0;
-#X connect 7 0 17 0;
-#X connect 9 0 44 0;
-#X connect 11 0 17 0;
-#X connect 12 0 23 0;
-#X connect 14 0 18 0;
-#X connect 15 0 18 0;
-#X connect 16 0 18 0;
-#X connect 17 0 36 0;
-#X connect 17 1 33 0;
-#X connect 18 0 36 0;
-#X connect 18 1 31 0;
-#X connect 20 0 21 0;
-#X connect 21 0 19 0;
-#X connect 22 0 36 0;
-#X connect 22 1 26 0;
-#X connect 23 0 36 0;
-#X connect 23 1 32 0;
-#X connect 24 0 25 0;
-#X connect 25 0 44 0;
-#X connect 31 0 30 0;
-#X connect 32 0 29 0;
-#X connect 33 0 28 0;
-#X connect 34 0 2 0;
-#X connect 35 0 2 0;
-#X connect 36 0 37 0;
-#X connect 37 0 24 0;
-#X connect 38 0 22 0;
-#X connect 39 0 22 0;
-#X connect 40 0 22 0;
-#X connect 41 0 22 0;
-#X connect 42 0 22 0;
-#X connect 48 0 47 0;
-#X connect 50 0 22 0;
-#X connect 51 0 2 0;
-#X connect 52 0 17 0;
-#X connect 53 0 23 0;
-#X connect 54 0 55 0;
-#X connect 55 0 15 0;
-#X connect 55 1 16 0;
-#X connect 55 2 14 0;
-#X connect 56 0 48 0;
-#X connect 57 0 58 0;
-#X connect 58 0 36 0;
-#X connect 58 1 21 0;
-#X coords 0 -1 1 1 148 146 1 100 100;
-#X restore 181 280 pd opus;
-#N canvas 0 22 450 300 config 0;
-#X obj 239 118 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
--2 -8 0 10 -262144 -1 -1 512 256;
-#X obj 291 118 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
-0 10 -262144 -1 -1 20 256;
-#X obj 168 105 bng 15 250 50 0 list-all list-all-set list 17 7 0 10
--262144 -1 -1;
-#X obj 342 118 nbx 2 14 1 99 0 0 timefilter timefilter-set timefilter
-0 -8 0 10 -262144 -1 -1 1 256;
-#X obj 105 126 bng 15 250 50 0 latency latency-set latency 17 7 0 10
--262144 -1 -1;
-#X obj 105 105 tgl 15 0 verbose verbose-set verbose 17 7 0 10 -262144
--1 -1 0 1;
-#X obj 157 158 tgl 15 0 ping ping-set ping 17 7 0 10 -262144 -1 -1
-0 1;
-#X obj 105 158 nbx 4 14 1 30000 0 0 ping_time ping_time-set ping_time
--2 -8 0 10 -262144 -1 -1 100 256;
-#X coords 0 -1 1 1 298 80 2 100 100;
-#X restore 31 163 pd config;
-#X text 33 250 uncompressed or compressed audio:;
-#X text 32 134 printing and transmission config:;
-#X obj 185 17 namecanvas \$0-advanced;
-#X text 31 14 ADVANCED SETTINGS;
-#N canvas 116 105 1005 652 dummies 0;
-#X obj 321 11 cnv 15 138 158 dummies-cnv dummies-cnv-set dummies 10
-12 0 14 -233017 -1 0;
-#X msg 41 175 pd~ stop;
-#X obj 73 239 pdcontrol;
-#X obj 73 291 list trim;
-#X msg 44 89 9999 9998 9988 9888;
-#X obj 44 115 unpack f f f f;
-#X msg 251 175 pd~ stop;
-#X obj 283 239 pdcontrol;
-#X obj 283 291 list trim;
-#X msg 282 205 dir 0 lib/_dummy-\$1.pd;
-#X msg 491 175 pd~ stop;
-#X obj 523 239 pdcontrol;
-#X obj 523 291 list trim;
-#X msg 522 205 dir 0 lib/_dummy-\$1.pd;
-#X msg 691 175 pd~ stop;
-#X obj 723 239 pdcontrol;
-#X obj 723 291 list trim;
-#X msg 722 205 dir 0 lib/_dummy-\$1.pd;
-#X obj 632 135 bng 15 250 50 0 empty empty stop 17 7 0 10 -262144 -1
--1;
-#X obj 328 71 tgl 15 0 empty empty a 17 7 0 10 -262144 -1 -1 0 1;
-#X obj 92 346 *~ 0.01;
-#X obj 92 372 *~;
-#X obj 20 407 pd~ -ninsig 1 -noutsig 2 -fifo 5;
-#X obj 278 416 pd~ -ninsig 1 -noutsig 2 -fifo 5;
-#X obj 522 418 pd~ -ninsig 1 -noutsig 2 -fifo 5;
-#X obj 764 418 pd~ -ninsig 1 -noutsig 2 -fifo 5;
-#X obj 124 373 osc~ 440;
-#X obj 328 95 tgl 15 0 empty empty c 17 7 0 10 -262144 -1 -1 0 1;
-#X obj 302 346 *~ 0.01;
-#X obj 302 372 *~;
-#X obj 328 119 tgl 15 0 empty empty e 17 7 0 10 -262144 -1 -1 0 1;
-#X obj 532 346 *~ 0.01;
-#X obj 532 372 *~;
-#X obj 328 143 tgl 15 0 empty empty a' 17 7 0 10 -262144 -1 -1 0 1
-;
-#X obj 802 346 *~ 0.01;
-#X obj 802 372 *~;
-#X obj 564 373 osc~ 667;
-#X obj 834 373 osc~ 889;
-#X obj 109 455 env~;
-#X floatatom 377 71 5 0 0 0 - - -;
-#X obj 199 455 env~;
-#X floatatom 417 71 5 0 0 0 - - -;
-#X obj 143 525 *~;
-#X obj 590 623 dac~;
-#X obj 173 525 *~;
-#X obj 356 71 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 379 455 env~;
-#X floatatom 377 95 5 0 0 0 - - -;
-#X obj 469 455 env~;
-#X floatatom 417 95 5 0 0 0 - - -;
-#X obj 413 525 *~;
-#X obj 443 525 *~;
-#X obj 356 95 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 619 455 env~;
-#X floatatom 377 119 5 0 0 0 - - -;
-#X obj 709 455 env~;
-#X floatatom 417 119 5 0 0 0 - - -;
-#X obj 653 525 *~;
-#X obj 683 525 *~;
-#X obj 356 119 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 859 455 env~;
-#X floatatom 377 143 5 0 0 0 - - -;
-#X obj 949 455 env~;
-#X floatatom 417 143 5 0 0 0 - - -;
-#X obj 893 525 *~;
-#X obj 923 525 *~;
-#X obj 356 143 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X msg 72 205 dir 0 lib/_dummy-\$1.pd;
-#X obj 73 265 list prepend pd~ start -nogui;
-#X obj 283 265 list prepend pd~ start -nogui;
-#X obj 523 265 list prepend pd~ start -nogui;
-#X obj 723 265 list prepend pd~ start -nogui;
-#X obj 334 373 osc~ 556;
-#X obj 84 28 bng 15 250 50 0 empty empty start 17 7 0 10 -262144 -1
--1;
-#X obj 331 57 tgl 10 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 358 57 tgl 10 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 83 55 start;
-#X text 86 328 send dummy sig;
-#X text 159 500 dummy receive;
-#X text 9 169 stop;
-#X obj 438 17 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 540 98 sel 0 1;
-#X obj 711 21 sel 0 1;
-#X msg 694 98 \; dummies-cnv-set color \$1 0 22 \;;
-#X msg 694 62 10;
-#X msg 743 60 6;
-#X obj 530 22 t a a a a;
-#X obj 837 15 switch~;
-#X obj 159 25 del 100;
-#X connect 1 0 22 0;
-#X connect 2 0 68 0;
-#X connect 3 0 22 0;
-#X connect 4 0 5 0;
-#X connect 5 0 67 0;
-#X connect 5 1 9 0;
-#X connect 5 2 13 0;
-#X connect 5 3 17 0;
-#X connect 6 0 23 0;
-#X connect 7 0 69 0;
-#X connect 8 0 23 0;
-#X connect 9 0 7 0;
-#X connect 10 0 24 0;
-#X connect 11 0 70 0;
-#X connect 12 0 24 0;
-#X connect 13 0 11 0;
-#X connect 14 0 25 0;
-#X connect 15 0 71 0;
-#X connect 16 0 25 0;
-#X connect 17 0 15 0;
-#X connect 18 0 1 0;
-#X connect 18 0 14 0;
-#X connect 18 0 10 0;
-#X connect 18 0 6 0;
-#X connect 19 0 20 0;
-#X connect 20 0 21 0;
-#X connect 21 0 22 0;
-#X connect 22 1 38 0;
-#X connect 22 1 42 0;
-#X connect 22 2 40 0;
-#X connect 22 2 44 0;
-#X connect 23 1 46 0;
-#X connect 23 1 50 0;
-#X connect 23 2 48 0;
-#X connect 23 2 51 0;
-#X connect 24 1 53 0;
-#X connect 24 1 57 0;
-#X connect 24 2 55 0;
-#X connect 24 2 58 0;
-#X connect 25 1 60 0;
-#X connect 25 1 64 0;
-#X connect 25 2 62 0;
-#X connect 25 2 65 0;
-#X connect 26 0 21 1;
-#X connect 27 0 28 0;
-#X connect 28 0 29 0;
-#X connect 29 0 23 0;
-#X connect 30 0 31 0;
-#X connect 31 0 32 0;
-#X connect 32 0 24 0;
-#X connect 33 0 34 0;
-#X connect 34 0 35 0;
-#X connect 35 0 25 0;
-#X connect 36 0 32 1;
-#X connect 37 0 35 1;
-#X connect 38 0 39 0;
-#X connect 40 0 41 0;
-#X connect 42 0 43 0;
-#X connect 44 0 43 1;
-#X connect 45 0 42 1;
-#X connect 45 0 44 1;
-#X connect 46 0 47 0;
-#X connect 48 0 49 0;
-#X connect 50 0 43 0;
-#X connect 51 0 43 1;
-#X connect 52 0 50 1;
-#X connect 52 0 51 1;
-#X connect 53 0 54 0;
-#X connect 55 0 56 0;
-#X connect 57 0 43 0;
-#X connect 58 0 43 1;
-#X connect 59 0 57 1;
-#X connect 59 0 58 1;
-#X connect 60 0 61 0;
-#X connect 62 0 63 0;
-#X connect 64 0 43 0;
-#X connect 65 0 43 1;
-#X connect 66 0 64 1;
-#X connect 66 0 65 1;
-#X connect 67 0 2 0;
-#X connect 68 0 3 0;
-#X connect 69 0 8 0;
-#X connect 70 0 12 0;
-#X connect 71 0 16 0;
-#X connect 72 0 29 1;
-#X connect 73 0 4 0;
-#X connect 74 0 33 0;
-#X connect 74 0 30 0;
-#X connect 74 0 27 0;
-#X connect 74 0 19 0;
-#X connect 75 0 45 0;
-#X connect 75 0 52 0;
-#X connect 75 0 59 0;
-#X connect 75 0 66 0;
-#X connect 80 0 86 0;
-#X connect 81 0 18 0;
-#X connect 81 1 88 0;
-#X connect 82 0 84 0;
-#X connect 82 1 85 0;
-#X connect 84 0 83 0;
-#X connect 85 0 83 0;
-#X connect 86 0 74 0;
-#X connect 86 1 81 0;
-#X connect 86 2 82 0;
-#X connect 86 3 87 0;
-#X connect 88 0 73 0;
-#X coords 0 -1 1 1 140 160 2 320 10;
-#X restore 31 448 pd dummies;
-#N canvas 261 220 450 300 player 0;
-#X obj 16 169 pd~ -ninsig 2 -noutsig 2;
-#X obj 95 120 osc~ 330;
-#X obj 167 132 osc~ 555;
-#X obj 89 210 env~;
-#X floatatom 89 236 5 0 0 0 - - -;
-#X obj 166 205 env~;
-#X floatatom 166 231 5 0 0 0 - - -;
-#X msg 95 72 pd~ stop;
-#X msg 16 17 pd~ start -nogui player.pd;
-#X msg 242 94 onoff \$1;
-#X obj 242 73 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X msg 43 45 player_name symbol dog \, connect bang;
-#X connect 0 1 3 0;
-#X connect 0 2 5 0;
-#X connect 1 0 0 0;
-#X connect 2 0 0 1;
-#X connect 3 0 4 0;
-#X connect 5 0 6 0;
-#X connect 7 0 0 0;
-#X connect 8 0 0 0;
-#X connect 9 0 0 0;
-#X connect 10 0 9 0;
-#X connect 11 0 0 0;
-#X restore 185 450 pd player;
-#X coords 0 -1 1 1 320 66 2 25 50;
-#X restore 28 14 pd status;
-#X obj 250 252 tgl 15 0 test-send test-send-set test-send 17 7 0 10
--262144 -1 -1 0 1;
-#X obj 246 82 _meter in;
-#X obj 298 82 _meter out;
-#X obj 250 271 tgl 15 0 adc-switch adc-switch-set adc-switch 17 7 0
-10 -262144 -1 -1 0 1;
+#X restore 253 412 pd guts;
+#X coords 0 -1 1 1 320 168 2 25 50;
+#X restore 36 37 pd status;
+#X obj 359 37 _meter in;
+#X obj 412 37 _meter out;
