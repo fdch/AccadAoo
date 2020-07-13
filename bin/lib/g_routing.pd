@@ -1,0 +1,23 @@
+#N canvas 0 22 710 432 12;
+#X obj 120 248 bng 15 250 50 0 load load-set (re)load 17 7 0 10 -4032
+-1 -1;
+#X obj 122 230 bng 15 250 50 0 open open-set setup_file 17 7 0 10 -257985
+-1 -1;
+#X obj 122 211 bng 15 250 50 0 default default-set default 17 7 0 10
+-232576 -1 -1;
+#X obj 101 101 cnv 15 214 90 empty empty peers 0 8 0 14 -203904 -1
+0;
+#X symbolatom 208 117 0 0 0 0 send_to send_to-set send_to;
+#X symbolatom 208 154 0 0 0 0 receive_from receive_from-set receive_from
+;
+#X obj 205 217 hradio 10 1 0 8 sink-id sink-id-set sink-id 0 -8 0 10
+-262144 -1 -1 0;
+#X obj 205 301 hradio 10 1 0 8 peer-source-id peer-source-id-set peer-source-id
+0 -8 0 10 -262144 -1 -1 3;
+#X obj 205 277 hradio 10 1 0 8 peer-sink-id peer-sink-id-set peer-sink-id
+0 -8 0 10 -262144 -1 -1 4;
+#X obj 205 241 hradio 10 1 0 8 source-id source-id source-id 0 -8 0
+10 -262144 -1 -1 1;
+#X msg 363 102 \; hostname symbol vrr.ffddcchh.com.ar \; port 9098
+\;;
+#X msg 361 166 \; hostname symbol vrr.iem.at \; port 7077 \;;

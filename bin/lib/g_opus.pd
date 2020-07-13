@@ -1,0 +1,118 @@
+#N canvas 0 22 850 750 12;
+#X obj 101 101 cnv 15 146 144 opus-canvas opus-canvas-set opus 20 12
+0 14 -233017 -1 0;
+#X msg 218 350 48000;
+#X obj 194 403 t b f;
+#X obj 108 144 nbx 5 14 -1e+37 1e+37 0 0 opus-blocksize opus-blocksize-set
+blocksize 0 -8 0 10 -262144 -1 -1 0 256;
+#X obj 108 175 nbx 5 14 -1e+37 1e+37 0 0 opus-samplerate opus-samplerate-set
+samplerate 0 -8 0 10 -262144 -1 -1 0 256;
+#X text 117 551 [format opus <blocksize> <samplerate> <bitrate> <complexity>
+<signal type>(, f 77;
+#X obj 177 144 nbx 5 14 -1e+37 1e+37 0 0 opus-bitrate opus-bitrate-set
+bitrate/s 0 -8 0 10 -262144 -1 -1 0 256;
+#X msg 302 328 max;
+#X obj 108 206 nbx 5 14 0 10 0 0 opus-complexity opus-complexity-set
+complexity 0 -8 0 10 -262144 -1 -1 0 256;
+#X msg 120 649 format opus;
+#X text 210 649 all arguments are optional!;
+#X msg 292 299 auto;
+#X msg 425 310 auto;
+#X text 543 254 signal type;
+#X msg 645 277 auto;
+#X msg 548 277 music;
+#X msg 596 277 voice;
+#X obj 281 379 t b a;
+#X obj 548 408 t b a;
+#X obj 484 653 text define \$0-opus;
+#X obj 484 601 loadbang;
+#X obj 107 432 t b f;
+#X obj 397 387 t b a;
+#X obj 107 580 list prepend format opus;
+#X obj 107 608 list trim;
+#X obj 139 463 text set \$0-opus 0 0;
+#X obj 226 429 text set \$0-opus 0 1;
+#X obj 313 463 text set \$0-opus 0 2;
+#X obj 429 437 text set \$0-opus 0 3;
+#X obj 580 461 text set \$0-opus 0 4;
+#X obj 580 435 symbol;
+#X obj 429 411 list;
+#X obj 313 404 list;
+#X msg 211 326 24000;
+#X msg 202 303 12000;
+#X msg 107 487 0;
+#X obj 107 520 text get \$0-opus;
+#X msg 116 300 128;
+#X msg 122 325 256;
+#X msg 128 349 512;
+#X msg 134 373 1024;
+#X msg 141 398 2048;
+#X text 130 45 Opus is a high quality codec for compressed audio \,
+see http://opus-codec.org/, f 79;
+#X obj 107 679 s format;
+#X obj 577 113 namecanvas \$0-opus-format;
+#X obj 192 108 bng 15 250 50 0 opus opus-set opus 17 7 0 10 -262144
+-1 -1;
+#X obj 265 215 s \$0-opus-format;
+#X msg 265 189 menu-open;
+#X obj 177 175 hradio 15 1 0 3 opus-type opus-type-set mus|voc|aut
+0 -8 0 10 -262144 -1 -1 2;
+#X obj 99 252 r opus-blocksize;
+#X obj 168 279 r opus-samplerate;
+#X obj 296 258 r opus-bitrate;
+#X obj 403 279 r opus-complexity;
+#X obj 558 202 r opus-type;
+#X obj 558 228 sel 0 1 2;
+#X obj 200 215 bng 15 250 50 0 empty empty more 17 7 0 10 -262144 -1
+-1;
+#X obj 381 581 r opus;
+#X obj 379 615 t b b;
+#X msg 484 625 set 512 48000 auto auto auto;
+#X connect 1 0 2 0;
+#X connect 2 0 35 0;
+#X connect 2 1 26 0;
+#X connect 7 0 17 0;
+#X connect 9 0 43 0;
+#X connect 11 0 17 0;
+#X connect 12 0 22 0;
+#X connect 14 0 18 0;
+#X connect 15 0 18 0;
+#X connect 16 0 18 0;
+#X connect 17 0 35 0;
+#X connect 17 1 32 0;
+#X connect 18 0 35 0;
+#X connect 18 1 30 0;
+#X connect 20 0 58 0;
+#X connect 21 0 35 0;
+#X connect 21 1 25 0;
+#X connect 22 0 35 0;
+#X connect 22 1 31 0;
+#X connect 23 0 24 0;
+#X connect 24 0 43 0;
+#X connect 30 0 29 0;
+#X connect 31 0 28 0;
+#X connect 32 0 27 0;
+#X connect 33 0 2 0;
+#X connect 34 0 2 0;
+#X connect 35 0 36 0;
+#X connect 36 0 23 0;
+#X connect 37 0 21 0;
+#X connect 38 0 21 0;
+#X connect 39 0 21 0;
+#X connect 40 0 21 0;
+#X connect 41 0 21 0;
+#X connect 47 0 46 0;
+#X connect 49 0 21 0;
+#X connect 50 0 2 0;
+#X connect 51 0 17 0;
+#X connect 52 0 22 0;
+#X connect 53 0 54 0;
+#X connect 54 0 15 0;
+#X connect 54 1 16 0;
+#X connect 54 2 14 0;
+#X connect 55 0 47 0;
+#X connect 56 0 57 0;
+#X connect 57 0 35 0;
+#X connect 57 1 58 0;
+#X connect 58 0 19 0;
+#X coords 0 -1 1 1 148 146 1 100 100;

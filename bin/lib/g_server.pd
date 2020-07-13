@@ -1,0 +1,6 @@
+#N canvas 0 22 450 300 12;
+#X obj 101 101 cnv 15 298 58 empty empty server 2 8 0 14 -204800 -1
+0;
+#X symbolatom 163 116 0 0 0 0 hostname hostname-set hostname;
+#X floatatom 163 137 0 0 0 0 port port-set port;
+#X coords 0 -1 1 1 300 60 1 100 100;
