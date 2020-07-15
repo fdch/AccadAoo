@@ -1,0 +1,197 @@
+#N canvas 657 94 533 500 12;
+#X declare -path ezaoo;
+#X obj 4 4 cnv 15 522 30 empty empty ezaoo 20 15 0 15 -228856 -1 0
+;
+#X obj 4 254 cnv 15 522 20 empty empty arguments: 10 10 0 14 -228856
+-1 0;
+#X obj 4 314 cnv 15 522 20 empty empty inlets: 10 10 0 14 -228856 -1
+0;
+#X obj 4 394 cnv 15 522 20 empty empty outlets: 10 10 0 14 -228856
+-1 0;
+#X obj 4 463 cnv 15 522 20 empty empty version 10 10 0 14 -228856 -1
+0;
+#X obj 40 159 pd~ -ninsig 2 -noutsig 2 -fifo 5;
+#X obj 150 200 env~;
+#X floatatom 150 226 5 0 0 0 - - -;
+#X obj 261 201 env~;
+#X floatatom 261 227 5 0 0 0 - - -;
+#X obj 40 185 print;
+#X text 33 44 A pure data patch that makes makes aoo very easy to include
+within another patch (like this one);
+#X text 58 281 No arguments. See pd~'s help;
+#X text 63 334 1: pd~ messages and messages to send to ezaoo \; 1:
+signal inlet channel 1 \; 2: signal inlet channel 2 \;;
+#X text 60 410 1: pd~ messages from subprocess (see pd~'s help) \;
+2: signal outlet 1 (from ezaoo channel 1) \; 3: signal outlet 2 (from
+ezaoo channel 2) \;;
+#X text 440 462 fd_lib v0.2;
+#X obj 380 8 declare -path ezaoo;
+#X text 333 160 see here -->;
+#X obj 53 128 r \$0-ezaoo;
+#N canvas 200 100 190 200 input 0;
+#X obj 50 70 inlet~;
+#X obj 50 140 outlet~;
+#X connect 0 0 1 0;
+#X restore 40 100 pd input sig 1;
+#N canvas 200 100 190 200 input 0;
+#X obj 50 70 inlet~;
+#X obj 50 140 outlet~;
+#X connect 0 0 1 0;
+#X restore 261 100 pd input sig 2;
+#N canvas 22 102 849 489 usage 0;
+#X obj 491 446 s \$0-ezaoo;
+#N canvas 24 103 847 485 more-stuff 0;
+#X obj 20 290 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 45 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 21 437 s \$0-ezaoo;
+#X msg 20 319 verbose \$1;
+#X msg 45 375 ping \$1;
+#X floatatom 113 352 5 0 0 0 - - -;
+#X msg 113 377 ping_time \$1;
+#X floatatom 434 130 5 0 0 0 - - -;
+#X msg 434 155 packetsize \$1;
+#X floatatom 553 127 5 0 0 0 - - -;
+#X msg 553 152 bufsize \$1;
+#X floatatom 644 128 5 0 0 0 - - -;
+#X msg 644 153 timefilter \$1;
+#X msg 98 413 list-all;
+#X obj 474 194 s \$0-ezaoo;
+#X msg 427 38 compression \$1;
+#X obj 427 14 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 285 58 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 285 78 test-send \$1;
+#X floatatom 51 53 5 0 127 0 0-127 - -;
+#X msg 51 78 in-vol \$1;
+#X floatatom 169 51 5 0 127 0 0-127 - -;
+#X msg 169 76 out-vol \$1;
+#X obj 299 116 s \$0-ezaoo;
+#X text 12 4 Check up your in/out volumes and run a test sound if necessary:
+;
+#X msg 53 173 latency;
+#X obj 24 219 s \$0-ezaoo;
+#X msg 24 135 peers;
+#X text 79 131 Check who is connected;
+#X text 118 173 Check round-trip latency between you and each one of
+the other players, f 33;
+#X text 547 35 1: opus (compressed) \; 0: pcm (uncompressed;
+#X text 108 299 raise verbosity;
+#X text 166 345 run a 'ping' test;
+#X text 171 413 show sources and sinks;
+#X obj 427 65 s \$0-ezaoo;
+#X text 423 85 Change udp packet max size (samps) or buffer size (msec)
+\, dll filter (see aoo_*-help.pd);
+#X obj 398 453 s \$0-ezaoo;
+#X msg 398 339 hostname symbol vrr.iem.at \, port 7077, f 21;
+#X msg 427 389 hostname symbol vrr.ffddcchh.com.ar \, port 9098, f
+21;
+#X text 409 219 ADVANCED: you can set up your own server for this;
+#X text 568 349 <-- from aoo's developers' server;
+#X text 395 246 The connection is established with the group via a
+hostname (a public ip where the aoo_server resides) and a port (where
+the aoo_server is listening on). The default values here (for testing)
+are the following (NOTE: You DONT NEED to edit these unless you want
+to use your own server):;
+#X text 589 402 <-- a personal (aws) server;
+#X text 454 12 Choose if sending compressed or uncompressed audio;
+#X connect 0 0 3 0;
+#X connect 1 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 2 0;
+#X connect 5 0 6 0;
+#X connect 6 0 2 0;
+#X connect 7 0 8 0;
+#X connect 8 0 14 0;
+#X connect 9 0 10 0;
+#X connect 10 0 14 0;
+#X connect 11 0 12 0;
+#X connect 12 0 14 0;
+#X connect 13 0 2 0;
+#X connect 15 0 34 0;
+#X connect 16 0 15 0;
+#X connect 17 0 18 0;
+#X connect 18 0 23 0;
+#X connect 19 0 20 0;
+#X connect 20 0 23 0;
+#X connect 21 0 22 0;
+#X connect 22 0 23 0;
+#X connect 25 0 26 0;
+#X connect 27 0 26 0;
+#X connect 37 0 36 0;
+#X connect 38 0 36 0;
+#X restore 709 448 pd more-stuff;
+#X text 12 9 ezaoo is meant to be run from within a pd~ subprocess
+that has 2 inputs and 2 outpus. The inputs are whatever you'd like
+to send to other players. The outputs will be the mix of all players
+(but not you). Since the server wont let you listen to your own mix
+\, remember to send your audio to the dac as well...;
+#X msg 132 274 pd~ stop;
+#X msg 97 225 pd~ start -stderr -nogui ezaoo/ezaoo.pd;
+#X obj 97 321 s \$0-ezaoo;
+#X text 10 115 Once you have your audio set up (AND DSP ON!) you can
+start the process:;
+#X text 209 273 ... or this one to stop it.;
+#X msg 466 387 connect 1;
+#X msg 547 413 start 1;
+#X msg 485 67 username symbol myname;
+#X obj 485 92 s \$0-ezaoo;
+#X obj 493 280 s \$0-ezaoo;
+#X text 670 71 replace 'myname' with your name, f 16;
+#X text 691 242 replace 'mygroup' with your group name, f 13;
+#X text 441 11 BEFORE CONNECTING \, you need to set up your username
+by sending this message to the pd~ process:;
+#X text 10 357 Only after the process has started you can connect to
+other players. Mind: before you connect \, you need to set up your
+username and group names...;
+#X text 13 189 Send this message to pd~ to start ezaoo (pd will freeze
+for a second) :;
+#X msg 493 247 group_join symbol mygroup;
+#X msg 553 386 connect 0;
+#X msg 613 415 start 0;
+#X obj 23 423 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#N canvas 0 22 450 300 big-message 0;
+#X msg 8 86 pd~ start -stderr -nogui ezaoo/ezaoo.pd \, hostname symbol
+vrr.ffddcchh.com.ar \, port 9098 \, username symbol testgroup \, group_join
+symbol testgroup \, connect 1 \, start 1 \, compression 0 \, packetsize
+512 \, bufsize 20 \, timefilter 1 \, in-vol 100 \, out-vol 100 \, test-send
+0 \, verbose 0 \, ping_time 1000 \, ping 0;
+#X obj 8 183 s \$0-ezaoo;
+#X text 18 37 you can pack all setup within a single message. This
+here has the internal variables you can adjust:;
+#X obj 8 11 inlet;
+#X text 115 224 see the 'more-stuff' subpatch for more help;
+#X connect 0 0 1 0;
+#X connect 3 0 0 0;
+#X restore 23 451 pd big-message;
+#X text 130 448 <-- ps. you can pack stuff in a big message...;
+#X msg 153 144 \; pd dsp 1;
+#X text 446 137 Then \, you need to set up a group name. This is an
+identifier so that other people jump in the same virtual room and can
+hear each other \; and \, it prevents other people (that do not know
+the group name) to enter into the room. You join a group with this
+command:, f 55;
+#X text 448 325 Finally \, send a 'connect' 1/0 to begin/stop listening
+to the other players \, and then 'start' 1/0 to send music to the other
+players:, f 54;
+#X connect 3 0 5 0;
+#X connect 4 0 5 0;
+#X connect 8 0 0 0;
+#X connect 9 0 0 0;
+#X connect 10 0 11 0;
+#X connect 18 0 12 0;
+#X connect 19 0 0 0;
+#X connect 20 0 0 0;
+#X connect 21 0 22 0;
+#X restore 429 160 pd usage;
+#X connect 5 0 10 0;
+#X connect 5 1 6 0;
+#X connect 5 2 8 0;
+#X connect 6 0 7 0;
+#X connect 8 0 9 0;
+#X connect 18 0 5 0;
+#X connect 19 0 5 0;
+#X connect 20 0 5 1;

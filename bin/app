@@ -1,15 +1,16 @@
 #!/bin/sh
 
-VERSION=1 # version number
-
+VERSION=1.1 # version number
 # exclude from the deploy
 EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
-
-DIR=$(echo ~/Documents/AccadAoo)
-APP=${DIR}/AccadAoo-${VERSION}.app # app bundle
+LIBNAME=ezaoo
+MACAPPNAME=AccadAoo
+DIR=$(echo ~/Documents/${MACAPPNAME})
+APPNAME=${MACAPPNAME}-${VERSION}.app
+APP=${DIR}/${APPNAME} # app bundle
 ZIP=${APP//.app/}-macos.zip
 PATCHDIR=${APP}/Contents/Resources/patch/ # 'patch' dir inside bundle
-
+PDLIBDIR=~/Library/Pd
 for i in ${EXCLUDE[@]}; do EX+="--exclude=$i "; done
 
 run() {
@@ -18,7 +19,11 @@ run() {
 		rm -rf ${ZIP}
 		cd ${DIR} && zip -r ${ZIP} ./*.app ./setup.txt && cd -
 		# zip -rqj ${DIR}/${APP}.zip ${APP} ${DIR}/setup.txt 
-		echo "--- App created."
+		echo "--- ${APPNAME} created."
+		rsync -qaP ${EX} ${DIR}/bin/* ${PDLIBDIR}/${LIBNAME}
+		echo "--- ${LIBNAME} created."
+		cd ${PDLIBDIR}
+		deken package -v ${VERSION} ${LIBNAME}
 	elif [[ "$1" == "backup" ]] || [[ $1 == "b" ]]; then
 		#	Find next backup item nubmer
 		i=1
@@ -31,7 +36,18 @@ run() {
 	elif [[ "$1" == "test" ]] || [[ $1 == "t" ]]; then
 		open ${APP}
 	elif [[ "$1" == "run" ]] || [[ $1 == "r" ]]; then
-		pd -noprefs -lib aoo -jack -open ${DIR}/bin/main.pd
+		pd -noprefs -lib aoo -jack -open ${DIR}/bin/${LIBNAME}.pd
+	elif [[ "$1" == "upload" ]] || [[ $1 == "u" ]]; then
+		cd ${PDLIBDIR}
+		DEK=$(ls ${LIBNAME}*.dek)
+		while true; do
+		    read -p "Do you wish to upload ${DEK}?" yn
+		    case $yn in
+		        [Yy]* ) deken upload ${DEK}; break;;
+		        [Nn]* ) exit;;
+		        * ) echo "Please answer yes or no.";;
+		    esac
+		done
 	else
 		echo "Not implemented: $1"
 	fi
