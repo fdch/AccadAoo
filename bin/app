@@ -19,6 +19,7 @@ run() {
 		rm -rf ${ZIP}
 		cd ${DIR} && zip -r ${ZIP} ./*.app && cd - 
 		echo "--- ${APPNAME} created."
+		rsync -qaP ${APP} /Applications
 		rsync -qaP ${EX} ${DIR}/bin/* ${PDLIBDIR}/${LIBNAME}
 		echo "--- ${LIBNAME} created."
 		cd ${PDLIBDIR}
