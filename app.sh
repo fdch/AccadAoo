@@ -6,7 +6,7 @@ EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
 LIBNAME=ezaoo
 MACAPPNAME=AccadAoo
 DIR=$(echo ~/Documents/${MACAPPNAME})
-APPNAME=${MACAPPNAME}-${VERSION}.app
+APPNAME=${MACAPPNAME}.app
 APP=${DIR}/${APPNAME} # app bundle
 ZIP=${APP//.app/}-macos.zip
 PATCHDIR=${APP}/Contents/Resources/patch/ # 'patch' dir inside bundle
@@ -17,8 +17,7 @@ run() {
 	if [[ "$1" == "deploy" ]] || [[ $1 == "d" ]]; then
 		rsync -qaP ${EX} ${DIR}/bin/* ${PATCHDIR}
 		rm -rf ${ZIP}
-		cd ${DIR} && zip -r ${ZIP} ./*.app ./setup.txt && cd -
-		# zip -rqj ${DIR}/${APP}.zip ${APP} ${DIR}/setup.txt 
+		cd ${DIR} && zip -r ${ZIP} ./*.app && cd - 
 		echo "--- ${APPNAME} created."
 		rsync -qaP ${EX} ${DIR}/bin/* ${PDLIBDIR}/${LIBNAME}
 		echo "--- ${LIBNAME} created."
