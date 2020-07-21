@@ -1,4 +1,4 @@
-#N canvas 0 22 710 432 12;
+#N canvas 0 0 425 419 12;
 #X obj 120 248 bng 15 250 50 0 load load-set (re)load 17 7 0 10 -4032
 -1 -1;
 #X obj 122 230 bng 15 250 50 0 open open-set setup_file 17 7 0 10 -257985
@@ -18,6 +18,3 @@
 0 -8 0 10 -262144 -1 -1 4;
 #X obj 205 241 hradio 10 1 0 8 source-id source-id source-id 0 -8 0
 10 -262144 -1 -1 1;
-#X msg 363 102 \; hostname symbol vrr.ffddcchh.com.ar \; port 9098
-\;;
-#X msg 361 166 \; hostname symbol vrr.iem.at \; port 7077 \;;
