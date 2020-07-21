@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=1.1 # version number
+VERSION=1.2 # version number
 # exclude from the deploy
 EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
 LIBNAME=ezaoo
