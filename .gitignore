@@ -1,7 +1,10 @@
 bak/
 *.txt
 !setup.txt
+!AccadAoo.txt
+!Meta.txt
 .DS_Store
 *.app
 *.zip
 *.wav
+Plugin/

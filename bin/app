@@ -6,11 +6,15 @@ EXCLUDE=(app app.sh backup backup.sh bak .gitignore)
 LIBNAME=ezaoo
 MACAPPNAME=AccadAoo
 DIR=$(echo ~/Documents/${MACAPPNAME})
+PLUGIN=${DIR}/Plugin
+MACPLUGINDIR=/Library/Audio/Plug-Ins/Components/
+CAMODIR=$(echo ~/Downloads/Camomile)
 APPNAME=${MACAPPNAME}.app
 APP=${DIR}/${APPNAME} # app bundle
 ZIP=${APP//.app/}-macos.zip
 PATCHDIR=${APP}/Contents/Resources/patch/ # 'patch' dir inside bundle
 PDLIBDIR=~/Library/Pd
+DEPS=$(echo ~/Documents/fd_lib/scripts/deps.sh)
 for i in ${EXCLUDE[@]}; do EX+="--exclude=$i "; done
 
 run() {
@@ -23,6 +27,7 @@ run() {
 		rsync -qaP ${EX} ${DIR}/bin/* ${PDLIBDIR}/${LIBNAME}
 		echo "--- ${LIBNAME} created."
 		cd ${PDLIBDIR}
+		rm "${LIBNAME}[v${VERSION}].dex.txt"
 		deken package -v ${VERSION} ${LIBNAME}
 	elif [[ "$1" == "backup" ]] || [[ $1 == "b" ]]; then
 		#	Find next backup item nubmer
@@ -48,6 +53,14 @@ run() {
 		        * ) echo "Please answer yes or no.";;
 		    esac
 		done
+	elif [[ "$1" == "plugin" ]] || [[ $1 == "p" ]]; then
+		TGT=${PLUGIN}/${MACAPPNAME}
+		${DEPS} ${DIR}/bin/${LIBNAME}.pd ${TGT}
+		cp ${DIR}/bin/{AccadAoo,Meta}.txt ${PLUGIN}/${MACAPPNAME}
+		mv ${TGT}/${LIBNAME}.pd ${TGT}/${MACAPPNAME}.pd
+		cd  ${CAMODIR}
+		./camomile -f ${TGT} -o ${PLUGIN}/build
+		sudo rsync -qaP ${PLUGIN}/build/${MACAPPNAME}.component ${MACPLUGINDIR}
 	else
 		echo "Not implemented: $1"
 	fi

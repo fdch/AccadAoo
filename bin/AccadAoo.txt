@@ -1,0 +1,4 @@
+type effect;
+iolayout 1 1;
+code accAD;
+description Meta.txt;
