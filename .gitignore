@@ -8,3 +8,4 @@ bak/
 *.zip
 *.wav
 Plugin/
+latency/

@@ -1,0 +1,125 @@
+#N canvas 0 0 521 329 10;
+#X obj 63 60 namecanvas \$1-advanced;
+#X obj 13 13 cnv 15 480 30 version version-set AccadAoo-v1.2 10 15
+0 20 -204786 -1 0;
+#X obj 13 60 cnv 10 318 15 empty status-update TYPE:\\\ username\\\,\\\ group.\\\ TOGGLE:\\\ connect\\\,\\\ start
+3 8 0 12 -232576 -1 0;
+#X obj 13 44 cnv 10 318 15 status status-set offline 45 8 0 12 -233017
+-1 0;
+#X obj 16 47 bng 10 250 50 0 connecting connecting-set empty 17 7 0
+10 -232576 -1 -1;
+#X obj 29 47 bng 10 250 50 0 joining_group joining_group-set empty
+17 7 0 10 -203904 -1 -1;
+#X obj 42 47 tgl 10 0 online online-set empty 17 7 0 10 -204800 -1
+-1 0 1;
+#X obj 13 76 cnv 15 318 30 empty empty empty 35 8 0 12 -204786 -1 0
+;
+#X symbolatom 75 80 0 0 0 0 username username-set username;
+#X obj 13 137 cnv 15 318 30 empty empty empty 35 8 0 12 -4034 -1 0
+;
+#X obj 29 144 tgl 20 0 connect connect-set connect 25 10 0 12 -257985
+-1 -1 0 1;
+#X obj 109 144 tgl 20 0 start start-set start 25 10 0 12 -258113 -1
+-1 0 1;
+#X obj 244 144 bng 20 250 50 0 recorder recorder-set recorder 25 10
+0 12 -261234 -1 -1;
+#X obj 176 144 bng 20 250 50 0 peers peers-set peers 25 10 0 12 -261682
+-1 -1;
+#X obj 13 168 cnv 15 318 30 empty empty empty 35 8 0 12 -204800 -1
+0;
+#X obj 116 183 nbx 4 14 144 4096 0 0 packetsize packetsize-set packetsize
+-2 -8 0 10 -204786 -1 -1 144 256;
+#X obj 192 183 nbx 4 14 0 1e+37 0 0 bufsize bufsize-set bufsize 0 -8
+0 10 -204786 -1 -1 0 256;
+#X obj 264 183 nbx 2 14 1 99 0 0 timefilter timefilter-set timefilter
+0 -8 0 10 -204786 -1 -1 1 256;
+#X obj 28 174 bng 20 250 50 0 latency latency-set latency 25 10 0 12
+-262144 -1 -1;
+#X obj 13 199 cnv 15 318 30 empty empty empty 35 8 0 12 -261682 -1
+0;
+#X obj 192 207 tgl 20 0 ping ping-set ping 25 10 0 12 -262144 -1 -1
+0 1;
+#X obj 116 215 nbx 4 14 1 30000 0 0 ping_time ping_time-set ping_time
+-2 -8 0 10 -262144 -1 -1 1 256;
+#X obj 266 207 bng 20 250 50 0 list-all list-all-set list 25 10 0 12
+-262144 -1 -1;
+#X obj 28 207 tgl 20 0 verbose verbose-set verbose 25 10 0 12 -262144
+-1 -1 0 1;
+#X obj 296 46 tgl 10 0 compression compression-set opus 12 5 0 10 -232576
+-1 -1 0 1;
+#X symbolatom 197 80 0 0 0 0 group group_join-set group_join;
+#X obj 332 137 cnv 15 162 166 empty empty empty 20 12 0 14 -203904
+-66577 0;
+#X obj 362 154 vsl 15 140 0 127 0 0 in-vol in-vol-set in-vol 0 -9 0
+10 -262144 -1 -1 0 1;
+#X obj 383 175 vu 15 120 in-vu empty -1 -8 0 10 -66577 -1 0 0;
+#X obj 382 152 tgl 17 0 in-meter in-meter-set empty 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 429 154 vsl 15 140 0 127 0 0 out-vol out-vol-set out-vol 0 -9
+0 10 -262144 -1 -1 0 1;
+#X obj 450 175 vu 15 120 out-vu empty -1 -8 0 10 -66577 -1 0 0;
+#X obj 449 152 tgl 17 0 out-meter out-meter-set empty 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 13 230 cnv 15 318 35 pcm-canvas pcm-canvas-set empty 20 12 0
+14 -233017 -1 0;
+#X obj 49 248 hradio 15 1 0 8 pcm-blocksize pcm-blocksize-set blocksize:64
+0 -8 0 10 -262144 -1 -1 1;
+#X obj 173 249 nbx 6 14 8000 192000 0 0 pcm-samplerate pcm-samplerate-set
+samplerate 0 -8 0 10 -262144 -1 -1 8000 256;
+#X obj 239 248 hradio 15 1 0 4 pcm-bitdepth pcm-bitdepth-set pcm-bitdepth:4
+0 -8 0 10 -262144 -1 -1 2;
+#X obj 27 248 bng 15 250 50 0 pcm pcm-set pcm -10 -8 0 10 -262144 -1
+-1;
+#X obj 304 248 bng 15 250 50 0 pcm-more pcm-more-set empty 17 7 0 10
+-262144 -1 -1;
+#X obj 13 267 cnv 15 318 35 opus-canvas opus-canvas-set empty 20 12
+0 14 -225271 -1 0;
+#X obj 37 283 nbx 5 14 -1e+37 1e+37 0 0 opus-blocksize opus-blocksize-set
+blocksize 0 -8 0 10 -262144 -1 -1 0 256;
+#X obj 93 283 nbx 5 14 -1e+37 1e+37 0 0 opus-samplerate opus-samplerate-set
+samplerate 0 -8 0 10 -262144 -1 -1 0 256;
+#X obj 150 283 nbx 5 14 -1e+37 1e+37 0 0 opus-bitrate opus-bitrate-set
+bitrate/s 0 -8 0 10 -262144 -1 -1 0 256;
+#X obj 206 283 nbx 5 14 0 10 0 0 opus-complexity opus-complexity-set
+complexity 0 -8 0 10 -262144 -1 -1 0 256;
+#X obj 18 282 bng 15 250 50 0 opus opus-set opus -5 -8 0 10 -262144
+-1 -1;
+#X obj 263 282 hradio 15 1 0 3 opus-type opus-type-set mus|voc|aut
+0 -8 0 10 -262144 -1 -1 2;
+#X obj 310 282 bng 15 250 50 0 opus-more opus-more-set empty 17 7 0
+10 -262144 -1 -1;
+#X obj 13 106 cnv 15 318 30 empty empty empty 2 8 0 14 -204800 -1 0
+;
+#X symbolatom 165 111 23 0 0 0 host hostname-set hostname;
+#X floatatom 92 111 5 0 0 0 port port-set port;
+#X obj 29 115 tgl 20 0 server-name server-name-set fdch 0 -5 0 8 -262144
+-1 -1 0 1;
+#X obj 332 76 cnv 15 162 60 empty empty empty 20 12 0 14 -261234 -66577
+0;
+#X obj 339 116 hsl 100 15 0 127 0 0 playback-master playback-master-set
+playback-master -2 -8 0 10 -204786 -1 -1 0 1;
+#X obj 336 81 bng 15 250 50 0 open-playfile open-playfile-set play-file
+17 7 0 10 -262130 -1 -1;
+#X obj 402 81 tgl 15 0 start-playback start-playback-set play 17 7
+0 10 -204786 -1 -1 0 1;
+#X obj 470 90 vsl 15 40 0 127 0 0 playback-vol playback-vol-set local
+0 -9 0 10 -261682 -1 -1 0 1;
+#X obj 447 90 vsl 15 40 0 127 0 0 broadcast-vol broadcast-vol-set snd
+0 -9 0 10 -261682 -1 -1 0 1;
+#X obj 332 45 cnv 20 162 30 empty empty empty 20 12 0 14 -261682 -66577
+0;
+#X obj 427 57 nbx 2 15 0 59 0 0 min min-set min 0 -8 0 12 -262144 -1
+-1 0 256;
+#X obj 461 57 nbx 2 15 0 59 0 0 sec sec-set sec 0 -8 0 12 -262144 -1
+-1 0 256;
+#X obj 261 46 tgl 10 0 test-send test-send-set test 14 5 0 10 -258113
+-1 -1 0 1;
+#X obj 229 46 tgl 10 0 adc-switch adc-switch-set adc 12 5 0 10 -204786
+-1 -1 0 1;
+#X obj 391 51 tgl 15 0 record record-set rec 17 7 0 10 -261234 -1 -1
+0 1;
+#X obj 336 51 bng 15 250 50 0 openfile openfile-set rec-file 17 7 0
+10 -232576 -1 -1;
+#X obj 472 19 bng 15 250 50 0 panic panic-set empty 17 7 0 10 -262144
+-1 -1;
+#X text 404 18 reconnect;
